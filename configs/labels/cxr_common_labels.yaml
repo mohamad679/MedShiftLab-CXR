@@ -1,0 +1,45 @@
+# MedShiftLab-CXR common label ontology.
+# This file defines the conservative core label mapping used for
+# CheXpert internal analysis and VinDr-CXR external validation.
+
+project: MedShiftLab-CXR
+version: 0.1.0
+status: draft_protocol
+
+core_labels:
+  - project_label: Atelectasis
+    chexpert_label: Atelectasis
+    vindr_label: Atelectasis
+    status: core
+    notes: "Common CXR finding; mapping should be verified against source schemas."
+
+  - project_label: Cardiomegaly
+    chexpert_label: Cardiomegaly
+    vindr_label: Cardiomegaly
+    status: core
+    notes: "Common CXR finding; external annotation process differs by dataset."
+
+  - project_label: Pleural Effusion
+    chexpert_label: Pleural Effusion
+    vindr_label: Pleural effusion
+    status: core
+    notes: "Common CXR finding; label spelling/capitalization differs."
+
+  - project_label: Pneumonia
+    chexpert_label: Pneumonia
+    vindr_label: Pneumonia
+    status: core_cautious
+    notes: "Clinically important but potentially label-noisy across datasets."
+
+  - project_label: Pneumothorax
+    chexpert_label: Pneumothorax
+    vindr_label: Pneumothorax
+    status: core
+    notes: "Clinically important CXR finding."
+
+normal_label:
+  project_label: No Finding
+  chexpert_label: No Finding
+  vindr_label: No finding
+  status: analyzed_separately
+  notes: "Analyzed separately from pathology labels."

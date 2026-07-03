@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+.env
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Large/local medical datasets
+data/
+datasets/
+CheXpert*/
+VinDr*/
+MIMIC*/
+
+# Local model weights/checkpoints
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+weights/
+checkpoints/
+
+# Temporary outputs
+tmp/
+scratch/

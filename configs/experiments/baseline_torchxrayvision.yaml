@@ -1,0 +1,20 @@
+project: MedShiftLab-CXR
+experiment: baseline_torchxrayvision
+status: draft_protocol
+model_family: pretrained_cxr_model
+primary_model: TorchXRayVision
+training_policy: no_foundation_model_training_from_scratch
+evaluation:
+  primary_metrics:
+    - AUROC
+    - AUPRC
+    - Brier score
+    - ECE
+  secondary_metrics:
+    - F1
+    - sensitivity
+    - specificity
+    - reliability_diagram
+external_validation:
+  dataset: VinDr-CXR
+  tuning_allowed: false
