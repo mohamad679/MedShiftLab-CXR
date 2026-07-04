@@ -6,6 +6,7 @@ CheXpertRecord objects. It does not load raw images or run model inference.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
 
 import pandas as pd
@@ -13,6 +14,24 @@ import pandas as pd
 from medshiftlab.data.chexpert import CHEXPERT_PATH_COLUMN, CheXpertRecord, parse_chexpert_record
 from medshiftlab.labels.ontology import CXRLabelOntology
 from medshiftlab.labels.uncertainty import UncertaintyStrategy
+
+
+def validate_chexpert_metadata_columns(
+    columns: Iterable[str],
+    ontology: CXRLabelOntology,
+) -> None:
+    """Require the path and every ontology-mapped CheXpert label column."""
+
+    available_columns = set(columns)
+    required_columns = [CHEXPERT_PATH_COLUMN, *ontology.chexpert_to_project()]
+    missing_columns = [
+        column for column in required_columns if column not in available_columns
+    ]
+    if missing_columns:
+        raise ValueError(
+            "Missing required CheXpert metadata columns: "
+            + ", ".join(missing_columns)
+        )
 
 
 def load_chexpert_metadata_csv(
@@ -46,8 +65,7 @@ def load_chexpert_metadata_csv(
 
     dataframe = pd.read_csv(metadata_path, nrows=max_rows)
 
-    if CHEXPERT_PATH_COLUMN not in dataframe.columns:
-        raise ValueError(f"Missing required CheXpert column: {CHEXPERT_PATH_COLUMN}")
+    validate_chexpert_metadata_columns(dataframe.columns, ontology)
 
     records: list[CheXpertRecord] = []
 

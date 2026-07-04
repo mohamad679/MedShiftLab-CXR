@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import math
 import re
-from typing import Any, Literal, Mapping
+from collections.abc import Mapping, Sequence
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -117,20 +118,34 @@ def infer_chexpert_patient_id(image_path: str) -> str | None:
     return match.group(1)
 
 
-def validate_patient_disjoint_splits(records: list[CheXpertRecord]) -> None:
-    """Validate that each patient appears in at most one split.
+def validate_patient_disjoint_splits(
+    split_records: Mapping[str, Sequence[CheXpertRecord]],
+) -> None:
+    """Validate that present patient IDs occur in only one named split."""
 
-    This function expects records to optionally carry a split in future versions.
-    It is currently a placeholder boundary check and will be extended once split
-    metadata is introduced.
-    """
+    patient_splits: dict[str, str] = {}
 
-    patients = [record.patient_id for record in records if record.patient_id is not None]
-    if not patients:
-        return
+    for split_name, records in split_records.items():
+        if not isinstance(split_name, str) or not split_name.strip():
+            raise ValueError("split names must not be blank")
 
-    if any(patient.strip() == "" for patient in patients):
-        raise ValueError("patient IDs must not be blank when present")
+        normalized_split_name = split_name.strip()
+        for record in records:
+            patient_id = record.patient_id
+            if patient_id is None:
+                continue
+
+            normalized_patient_id = patient_id.strip()
+            if not normalized_patient_id:
+                raise ValueError("patient IDs must not be blank when present")
+
+            previous_split = patient_splits.get(normalized_patient_id)
+            if previous_split is not None and previous_split != normalized_split_name:
+                raise ValueError(
+                    f"Patient {normalized_patient_id!r} appears in multiple splits: "
+                    f"{previous_split!r} and {normalized_split_name!r}"
+                )
+            patient_splits[normalized_patient_id] = normalized_split_name
 
 
 def _required_string(row: Mapping[str, Any], key: str) -> str:

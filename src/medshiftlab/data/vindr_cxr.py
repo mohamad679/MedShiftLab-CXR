@@ -69,6 +69,13 @@ def parse_vindr_cxr_record(
     view_position = _first_optional_string(row, VINDR_VIEW_POSITION_COLUMNS)
 
     source_to_project = ontology.vindr_to_project()
+    missing_columns = [label for label in source_to_project if label not in row]
+    if missing_columns:
+        raise ValueError(
+            "Missing required VinDr-CXR label columns: "
+            + ", ".join(missing_columns)
+        )
+
     raw_labels: dict[str, Any] = {}
     project_labels: dict[str, float | None] = {}
 

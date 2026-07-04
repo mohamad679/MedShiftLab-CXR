@@ -16,6 +16,18 @@ from medshiftlab.labels import (
 )
 
 
+def _chexpert_row(image_path: str) -> dict[str, object]:
+    return {
+        "Path": image_path,
+        "Atelectasis": 0,
+        "Cardiomegaly": 0,
+        "Pleural Effusion": 0,
+        "Pneumonia": 0,
+        "Pneumothorax": 0,
+        "No Finding": 1,
+    }
+
+
 def test_default_label_ontology_loads_core_labels() -> None:
     ontology = load_default_label_ontology()
 
@@ -226,14 +238,12 @@ def test_load_chexpert_metadata_csv_respects_max_rows(tmp_path) -> None:
 
     pd.DataFrame(
         [
-            {
-                "Path": "CheXpert-v1.0-small/train/patient00001/study1/view1_frontal.jpg",
-                "Atelectasis": 1,
-            },
-            {
-                "Path": "CheXpert-v1.0-small/train/patient00002/study1/view1_frontal.jpg",
-                "Atelectasis": 0,
-            },
+            _chexpert_row(
+                "CheXpert-v1.0-small/train/patient00001/study1/view1_frontal.jpg"
+            ),
+            _chexpert_row(
+                "CheXpert-v1.0-small/train/patient00002/study1/view1_frontal.jpg"
+            ),
         ]
     ).to_csv(csv_path, index=False)
 
@@ -264,7 +274,30 @@ def test_load_chexpert_metadata_csv_rejects_missing_path_column(tmp_path) -> Non
 
     pd.DataFrame([{"Atelectasis": 1}]).to_csv(csv_path, index=False)
 
-    with pytest.raises(ValueError, match="Missing required CheXpert column: Path"):
+    with pytest.raises(
+        ValueError,
+        match="Missing required CheXpert metadata columns: Path",
+    ):
+        load_chexpert_metadata_csv(csv_path, ontology, "U-ignore")
+
+
+def test_load_chexpert_metadata_csv_rejects_missing_label_column(tmp_path) -> None:
+    import pandas as pd
+
+    from medshiftlab.data import load_chexpert_metadata_csv
+
+    ontology = load_default_label_ontology()
+    csv_path = tmp_path / "bad_chexpert.csv"
+    row = _chexpert_row(
+        "CheXpert-v1.0-small/train/patient00001/study1/view1_frontal.jpg"
+    )
+    del row["Pneumonia"]
+    pd.DataFrame([row]).to_csv(csv_path, index=False)
+
+    with pytest.raises(
+        ValueError,
+        match="Missing required CheXpert metadata columns: Pneumonia",
+    ):
         load_chexpert_metadata_csv(csv_path, ontology, "U-ignore")
 
 
@@ -375,7 +408,127 @@ def test_parse_vindr_cxr_record_rejects_non_binary_label() -> None:
     row = {
         "image_id": "00000001",
         "Atelectasis": 2,
+        "Cardiomegaly": 0,
+        "Pleural effusion": 0,
+        "Pneumonia": 0,
+        "Pneumothorax": 0,
+        "No finding": 0,
     }
 
     with pytest.raises(ValueError, match="VinDr-CXR image-level labels must be binary"):
         parse_vindr_cxr_record(row, ontology)
+
+
+def test_parse_vindr_cxr_record_rejects_missing_label_column() -> None:
+    from medshiftlab.data import parse_vindr_cxr_record
+
+    ontology = load_default_label_ontology()
+    row = {
+        "image_id": "00000001",
+        "Atelectasis": 0,
+        "Cardiomegaly": 0,
+        "Pleural effusion": 0,
+        "Pneumothorax": 0,
+        "No finding": 1,
+    }
+
+    with pytest.raises(
+        ValueError,
+        match="Missing required VinDr-CXR label columns: Pneumonia",
+    ):
+        parse_vindr_cxr_record(row, ontology)
+
+
+def test_validate_patient_disjoint_splits_rejects_cross_split_patient() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    ontology = load_default_label_ontology()
+    record = parse_chexpert_record(
+        _chexpert_row(
+            "CheXpert-v1.0-small/train/patient00001/study1/view1_frontal.jpg"
+        ),
+        ontology,
+        "U-ignore",
+    )
+
+    with pytest.raises(ValueError, match="appears in multiple splits"):
+        validate_patient_disjoint_splits(
+            {"train": [record], "validation": [record]}
+        )
+
+
+def test_validate_patient_disjoint_splits_allows_repeated_patient_within_split() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    ontology = load_default_label_ontology()
+    first_record = parse_chexpert_record(
+        _chexpert_row(
+            "CheXpert-v1.0-small/train/patient00001/study1/view1_frontal.jpg"
+        ),
+        ontology,
+        "U-ignore",
+    )
+    second_record = parse_chexpert_record(
+        _chexpert_row(
+            "CheXpert-v1.0-small/train/patient00001/study2/view1_frontal.jpg"
+        ),
+        ontology,
+        "U-ignore",
+    )
+
+    validate_patient_disjoint_splits({"train": [first_record, second_record]})
+
+
+def test_validate_patient_disjoint_splits_ignores_missing_patient_ids() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    ontology = load_default_label_ontology()
+    record = parse_chexpert_record(
+        _chexpert_row("local/images/view1.jpg"),
+        ontology,
+        "U-ignore",
+    )
+
+    assert record.patient_id is None
+    validate_patient_disjoint_splits({"train": [record], "validation": [record]})
+
+
+def test_validate_patient_disjoint_splits_accepts_disjoint_named_splits() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    ontology = load_default_label_ontology()
+    records = [
+        parse_chexpert_record(
+            _chexpert_row(
+                f"CheXpert-v1.0-small/train/patient0000{index}/study1/view1_frontal.jpg"
+            ),
+            ontology,
+            "U-ignore",
+        )
+        for index in range(1, 4)
+    ]
+
+    validate_patient_disjoint_splits(
+        {"train": [records[0]], "validation": [records[1]], "test": [records[2]]}
+    )
+
+
+def test_validate_patient_disjoint_splits_rejects_blank_split_name() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    with pytest.raises(ValueError, match="split names must not be blank"):
+        validate_patient_disjoint_splits({" ": []})
+
+
+def test_validate_patient_disjoint_splits_rejects_blank_patient_id() -> None:
+    from medshiftlab.data import validate_patient_disjoint_splits
+
+    ontology = load_default_label_ontology()
+    record = parse_chexpert_record(
+        _chexpert_row("local/images/view1.jpg"),
+        ontology,
+        "U-ignore",
+    ).model_copy(update={"patient_id": " "})
+
+    with pytest.raises(ValueError, match="patient IDs must not be blank"):
+        validate_patient_disjoint_splits({"train": [record]})
