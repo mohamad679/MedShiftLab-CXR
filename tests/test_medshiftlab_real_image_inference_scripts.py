@@ -138,4 +138,4 @@ def test_inference_script_reports_missing_torchxrayvision(tmp_path: Path) -> Non
         cwd=REPO_ROOT, env=_environment(blocker), check=False, capture_output=True, text=True,
     )
     assert result.returncode == 2
-    assert "torchxrayvision is required for inference" in result.stderr
+    assert "optional dependencies" in result.stderr
