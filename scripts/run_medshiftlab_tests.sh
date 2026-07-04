@@ -16,4 +16,5 @@ PYTHONPATH=src:. pytest -o addopts='' --noconftest \
   tests/test_medshiftlab_reporting_exports.py \
   tests/test_medshiftlab_experiment_runner.py \
   tests/test_medshiftlab_experiment_export_runner.py \
+  tests/test_medshiftlab_real_data_scripts.py \
   -q

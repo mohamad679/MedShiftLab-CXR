@@ -21,6 +21,10 @@ datasets/
 CheXpert*/
 VinDr*/
 MIMIC*/
+*.dcm
+*.dicom
+*.nii
+*.nii.gz
 
 # Local model weights/checkpoints
 *.ckpt
