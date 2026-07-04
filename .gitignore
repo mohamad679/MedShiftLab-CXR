@@ -22,6 +22,13 @@ venv/
 /CheXpert*/
 /VinDr*/
 /MIMIC*/
+*.zip
+image_subsets/
+raw_images/
+raw_image_folders/
+**/CheXpert-v1.0-small/
+sample_grid*.png
+predictions_with_absolute_paths*.csv
 *.dcm
 *.dicom
 *.nii

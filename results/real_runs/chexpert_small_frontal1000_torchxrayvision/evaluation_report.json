@@ -1,0 +1,55 @@
+{
+  "run": {
+    "dataset": "CheXpert-v1.0-small",
+    "subset": "first 1000 frontal train images",
+    "frontal_train_images_available": 191027,
+    "environment": "Google Colab",
+    "gpu": "Tesla T4",
+    "torch_version": "2.11.0+cu128",
+    "torchxrayvision_version": "1.5.2",
+    "model": "torchxrayvision DenseNet",
+    "weights": "densenet121-res224-all",
+    "device": "cuda",
+    "training_performed": false,
+    "prediction_output_shape": [1000, 20],
+    "metadata_shapes": {
+      "train.csv": [223414, 19],
+      "valid.csv": [234, 19]
+    },
+    "smoke20_qc": {
+      "n_extracted": 20,
+      "n_readable": 20,
+      "mode": "L"
+    },
+    "torchxrayvision_pathologies": [
+      "Atelectasis",
+      "Consolidation",
+      "Infiltration",
+      "Pneumothorax",
+      "Edema",
+      "Emphysema",
+      "Fibrosis",
+      "Effusion",
+      "Pneumonia",
+      "Pleural_Thickening",
+      "Cardiomegaly",
+      "Nodule",
+      "Mass",
+      "Hernia",
+      "Lung Lesion",
+      "Fracture",
+      "Lung Opacity",
+      "Enlarged Cardiomediastinum"
+    ]
+  },
+  "evaluation_policy": {
+    "labels": ["Atelectasis", "Cardiomegaly", "Pleural Effusion", "Pneumonia", "Pneumothorax"],
+    "binary_metrics_targets": [0, 1],
+    "uncertain_label_soft_value": 0.5,
+    "missing_labels": "omitted",
+    "threshold": 0.5,
+    "threshold_tuning": false
+  },
+  "metrics_source": "Completed real Google Colab run; values transcribed without local inference or recomputation.",
+  "label_metrics_file": "evaluation_label_metrics.csv"
+}

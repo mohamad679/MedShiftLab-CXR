@@ -1,0 +1,14 @@
+{
+  "n_total": 1000,
+  "n_readable": 1000,
+  "n_unreadable": 0,
+  "mode_counts": {
+    "L": 1000
+  },
+  "width_min": 320.0,
+  "width_max": 449.0,
+  "width_mean": 377.013,
+  "height_min": 320.0,
+  "height_max": 390.0,
+  "height_mean": 320.285
+}
