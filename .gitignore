@@ -37,3 +37,6 @@ checkpoints/
 # Temporary outputs
 tmp/
 scratch/
+
+# Local code indexing tools
+.codebase-memory/
