@@ -1,0 +1,68 @@
+{
+  "dataset_name": "CheXpert",
+  "n_records": 223414,
+  "n_patients": 64540,
+  "n_records_without_patient_id": 0,
+  "labels": {
+    "Atelectasis": {
+      "label_name": "Atelectasis",
+      "available_count": 69008,
+      "missing_count": 154406,
+      "positive_count": 68278,
+      "negative_count": 730,
+      "soft_count": 0,
+      "positive_prevalence": 0.9894215163459309,
+      "mean_target": 0.9894215163459309
+    },
+    "Cardiomegaly": {
+      "label_name": "Cardiomegaly",
+      "available_count": 50638,
+      "missing_count": 172776,
+      "positive_count": 34483,
+      "negative_count": 16155,
+      "soft_count": 0,
+      "positive_prevalence": 0.6809708124333504,
+      "mean_target": 0.6809708124333504
+    },
+    "Pleural Effusion": {
+      "label_name": "Pleural Effusion",
+      "available_count": 133226,
+      "missing_count": 90188,
+      "positive_count": 96948,
+      "negative_count": 36278,
+      "soft_count": 0,
+      "positive_prevalence": 0.7276957951150677,
+      "mean_target": 0.7276957951150677
+    },
+    "Pneumonia": {
+      "label_name": "Pneumonia",
+      "available_count": 27556,
+      "missing_count": 195858,
+      "positive_count": 24242,
+      "negative_count": 3314,
+      "soft_count": 0,
+      "positive_prevalence": 0.8797358107127304,
+      "mean_target": 0.8797358107127304
+    },
+    "Pneumothorax": {
+      "label_name": "Pneumothorax",
+      "available_count": 78967,
+      "missing_count": 144447,
+      "positive_count": 20304,
+      "negative_count": 58663,
+      "soft_count": 0,
+      "positive_prevalence": 0.25712006281104766,
+      "mean_target": 0.25712006281104766
+    },
+    "No Finding": {
+      "label_name": "No Finding",
+      "available_count": 21124,
+      "missing_count": 202290,
+      "positive_count": 21124,
+      "negative_count": 0,
+      "soft_count": 0,
+      "positive_prevalence": 1.0,
+      "mean_target": 1.0
+    }
+  }
+}

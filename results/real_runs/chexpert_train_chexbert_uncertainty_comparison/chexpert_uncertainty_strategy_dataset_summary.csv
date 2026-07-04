@@ -1,0 +1,5 @@
+uncertainty_strategy,dataset_name,n_records,n_patients,n_records_without_patient_id
+U-ignore,CheXpert,223414,64540,0
+U-zero,CheXpert,223414,64540,0
+U-one,CheXpert,223414,64540,0
+U-soft,CheXpert,223414,64540,0
