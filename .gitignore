@@ -16,11 +16,11 @@ venv/
 .idea/
 
 # Large/local medical datasets
-data/
-datasets/
-CheXpert*/
-VinDr*/
-MIMIC*/
+/data/
+/datasets/
+/CheXpert*/
+/VinDr*/
+/MIMIC*/
 *.dcm
 *.dicom
 *.nii
