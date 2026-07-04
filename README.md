@@ -47,6 +47,7 @@ This is the focused test boundary for the active research track; see the [CI/tes
 - [CI/test boundary](docs/medshiftlab/ci_test_boundary.md)
 - [Limitations](docs/medshiftlab/limitations.md)
 - [Roadmap](docs/medshiftlab/roadmap.md)
+- [Real CheXpert uncertainty-strategy metadata analysis](results/real_runs/chexpert_train_chexbert_uncertainty_comparison/README.md)
 
 ## Legacy NeuroSight Project History
 
