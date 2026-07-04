@@ -1,0 +1,12 @@
+project: MedShiftLab-CXR
+dataset: VinDr-CXR
+role: external_validation_dataset
+status: access_required
+modality: chest_xray
+tasks:
+  - external_validation
+  - label_distribution_shift_analysis
+  - calibration_degradation_analysis
+  - failure_analysis
+leakage_policy: no_training_no_tuning_no_calibration_on_external_test
+notes: "Used strictly as external validation data."

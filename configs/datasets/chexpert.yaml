@@ -1,0 +1,13 @@
+project: MedShiftLab-CXR
+dataset: CheXpert
+role: primary_internal_dataset
+status: access_required
+modality: chest_xray
+tasks:
+  - metadata_audit
+  - uncertainty_label_analysis
+  - internal_evaluation
+  - threshold_selection
+  - optional_calibration_fitting
+leakage_policy: patient_disjoint_splits_required
+notes: "Raw data are not included in this repository."
