@@ -253,6 +253,106 @@ def test_load_chexpert_metadata_csv_respects_max_rows(tmp_path) -> None:
     assert records[0].patient_id == "patient00001"
 
 
+def test_iter_chexpert_metadata_csv_preserves_order_across_chunks(tmp_path) -> None:
+    import pandas as pd
+
+    from medshiftlab.data import iter_chexpert_metadata_csv
+
+    ontology = load_default_label_ontology()
+    csv_path = tmp_path / "chexpert_tiny.csv"
+    paths = [
+        f"CheXpert-v1.0-small/train/patient0000{index}/study1/view1_frontal.jpg"
+        for index in range(1, 4)
+    ]
+    pd.DataFrame([_chexpert_row(path) for path in paths]).to_csv(
+        csv_path, index=False
+    )
+
+    records = list(
+        iter_chexpert_metadata_csv(
+            csv_path,
+            ontology,
+            "U-ignore",
+            chunksize=1,
+        )
+    )
+
+    assert [record.image_path for record in records] == paths
+
+
+def test_iter_chexpert_metadata_csv_respects_max_rows(tmp_path) -> None:
+    import pandas as pd
+
+    from medshiftlab.data import iter_chexpert_metadata_csv
+
+    ontology = load_default_label_ontology()
+    csv_path = tmp_path / "chexpert_tiny.csv"
+    rows = [
+        _chexpert_row(
+            f"CheXpert-v1.0-small/train/patient0000{index}/study1/view1_frontal.jpg"
+        )
+        for index in range(1, 5)
+    ]
+    pd.DataFrame(rows).to_csv(csv_path, index=False)
+
+    records = list(
+        iter_chexpert_metadata_csv(
+            csv_path,
+            ontology,
+            "U-ignore",
+            max_rows=3,
+            chunksize=2,
+        )
+    )
+
+    assert len(records) == 3
+    assert records[-1].patient_id == "patient00003"
+
+
+def test_iter_chexpert_metadata_csv_rejects_nonpositive_chunksize(tmp_path) -> None:
+    import pandas as pd
+
+    from medshiftlab.data import iter_chexpert_metadata_csv
+
+    ontology = load_default_label_ontology()
+    csv_path = tmp_path / "chexpert_tiny.csv"
+    pd.DataFrame([_chexpert_row("local/view.jpg")]).to_csv(csv_path, index=False)
+
+    with pytest.raises(ValueError, match="chunksize must be positive"):
+        list(
+            iter_chexpert_metadata_csv(
+                csv_path,
+                ontology,
+                "U-ignore",
+                chunksize=0,
+            )
+        )
+
+
+def test_iter_chexpert_metadata_csv_validates_columns_before_yielding(tmp_path) -> None:
+    import pandas as pd
+
+    from medshiftlab.data import iter_chexpert_metadata_csv
+
+    ontology = load_default_label_ontology()
+    csv_path = tmp_path / "bad_chexpert.csv"
+    row = _chexpert_row("local/view.jpg")
+    del row["Pneumonia"]
+    pd.DataFrame([row]).to_csv(csv_path, index=False)
+
+    iterator = iter_chexpert_metadata_csv(
+        csv_path,
+        ontology,
+        "U-ignore",
+        chunksize=1,
+    )
+    with pytest.raises(
+        ValueError,
+        match="Missing required CheXpert metadata columns: Pneumonia",
+    ):
+        next(iterator)
+
+
 def test_load_chexpert_metadata_csv_rejects_missing_file(tmp_path) -> None:
     from medshiftlab.data import load_chexpert_metadata_csv
     from medshiftlab.labels import load_default_label_ontology

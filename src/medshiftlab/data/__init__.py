@@ -8,6 +8,7 @@ from medshiftlab.data.chexpert import (
     validate_patient_disjoint_splits,
 )
 from medshiftlab.data.chexpert_loader import (
+    iter_chexpert_metadata_csv,
     load_chexpert_metadata_csv,
     validate_chexpert_metadata_columns,
 )
@@ -30,6 +31,7 @@ __all__ = [
     "LabelSummary",
     "VinDrCXRRecord",
     "infer_chexpert_patient_id",
+    "iter_chexpert_metadata_csv",
     "load_chexpert_metadata_csv",
     "parse_chexpert_record",
     "parse_vindr_cxr_record",

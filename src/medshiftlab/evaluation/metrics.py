@@ -181,34 +181,26 @@ def _expected_calibration_error(
     if not targets:
         return None
 
+    counts = [0] * n_bins
+    target_sums = [0.0] * n_bins
+    score_sums = [0.0] * n_bins
+
+    for target, score in zip(targets, scores, strict=True):
+        bin_index = min(int(score * n_bins), n_bins - 1)
+        counts[bin_index] += 1
+        target_sums[bin_index] += target
+        score_sums[bin_index] += score
+
     total = len(targets)
     ece = 0.0
 
-    for bin_index in range(n_bins):
-        lower = bin_index / n_bins
-        upper = (bin_index + 1) / n_bins
-
-        in_bin: list[tuple[float, float]] = []
-        for target, score in zip(targets, scores, strict=True):
-            if bin_index == n_bins - 1:
-                include = lower <= score <= upper
-            else:
-                include = lower <= score < upper
-
-            if include:
-                in_bin.append((target, score))
-
-        if not in_bin:
+    for bin_index, count in enumerate(counts):
+        if count == 0:
             continue
 
-        bin_targets = [target for target, _ in in_bin]
-        bin_scores = [score for _, score in in_bin]
-
-        avg_target = sum(bin_targets) / len(bin_targets)
-        avg_score = sum(bin_scores) / len(bin_scores)
-        weight = len(in_bin) / total
-
-        ece += weight * abs(avg_score - avg_target)
+        avg_target = target_sums[bin_index] / count
+        avg_score = score_sums[bin_index] / count
+        ece += (count / total) * abs(avg_score - avg_target)
 
     return float(ece)
 

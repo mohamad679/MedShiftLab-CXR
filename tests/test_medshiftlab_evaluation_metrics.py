@@ -79,6 +79,39 @@ def test_evaluate_binary_label_ignores_missing_targets_and_scores() -> None:
     assert metrics.auroc == 1.0
 
 
+def test_evaluate_binary_label_ece_includes_score_one_in_last_bin() -> None:
+    metrics = evaluate_binary_label(
+        "Pneumonia",
+        y_true=[0],
+        y_score=[1.0],
+        n_bins=10,
+    )
+
+    assert metrics.ece == 1.0
+
+
+def test_evaluate_binary_label_ece_matches_mixed_calibration_case() -> None:
+    metrics = evaluate_binary_label(
+        "Pneumonia",
+        y_true=[0, 1, 1, 0],
+        y_score=[0.1, 0.4, 0.8, 1.0],
+        n_bins=2,
+    )
+
+    assert metrics.ece == pytest.approx(0.325)
+
+
+def test_evaluate_binary_label_empty_available_values_have_no_ece() -> None:
+    metrics = evaluate_binary_label(
+        "Pneumonia",
+        y_true=[None, ""],
+        y_score=[0.2, None],
+    )
+
+    assert metrics.n_available == 0
+    assert metrics.ece is None
+
+
 def test_evaluate_binary_label_rejects_invalid_probability() -> None:
     with pytest.raises(ValueError, match="score must be between"):
         evaluate_binary_label(

@@ -6,7 +6,7 @@ CheXpertRecord objects. It does not load raw images or run model inference.
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from pathlib import Path
 
 import pandas as pd
@@ -55,6 +55,28 @@ def load_chexpert_metadata_csv(
         A list of validated CheXpertRecord objects.
     """
 
+    return list(
+        iter_chexpert_metadata_csv(
+            csv_path,
+            ontology,
+            strategy,
+            soft_value=soft_value,
+            max_rows=max_rows,
+        )
+    )
+
+
+def iter_chexpert_metadata_csv(
+    csv_path: str | Path,
+    ontology: CXRLabelOntology,
+    strategy: UncertaintyStrategy | str,
+    *,
+    soft_value: float = 0.5,
+    max_rows: int | None = None,
+    chunksize: int = 25000,
+) -> Iterator[CheXpertRecord]:
+    """Yield validated CheXpert records from bounded DataFrame chunks."""
+
     metadata_path = Path(csv_path)
 
     if not metadata_path.exists():
@@ -63,20 +85,18 @@ def load_chexpert_metadata_csv(
     if max_rows is not None and max_rows <= 0:
         raise ValueError("max_rows must be positive when provided")
 
-    dataframe = pd.read_csv(metadata_path, nrows=max_rows)
+    if chunksize <= 0:
+        raise ValueError("chunksize must be positive")
 
-    validate_chexpert_metadata_columns(dataframe.columns, ontology)
+    header = pd.read_csv(metadata_path, nrows=0)
+    validate_chexpert_metadata_columns(header.columns, ontology)
 
-    records: list[CheXpertRecord] = []
-
-    for row in dataframe.to_dict(orient="records"):
-        records.append(
-            parse_chexpert_record(
+    chunks = pd.read_csv(metadata_path, chunksize=chunksize, nrows=max_rows)
+    for chunk in chunks:
+        for row in chunk.to_dict(orient="records"):
+            yield parse_chexpert_record(
                 row,
                 ontology,
                 strategy,
                 soft_value=soft_value,
             )
-        )
-
-    return records
