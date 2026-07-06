@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Data-centric evaluation framework for pretrained chest X-ray foundation models under annotation uncertainty and distribution shift."
 requires-python = ">=3.11"
 dependencies = [
+    "numpy>=1.26,<3",
+    "Pillow>=10,<13",
     "pydantic>=2,<3",
     "pandas>=2,<3",
     "matplotlib>=3.8,<4",
