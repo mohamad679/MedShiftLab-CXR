@@ -1,0 +1,20 @@
+# Tracked, path-free template only.
+# Copy this file to configs/data/local_paths.yaml and populate the ignored copy.
+# Null values intentionally make no claim that any dataset is locally available.
+
+version: 1
+datasets:
+  chexpert:
+    root_path: null
+    metadata_path: null
+    image_directory: null
+
+  mimic_cxr_jpg:
+    root_path: null
+    metadata_path: null
+    image_directory: null
+
+  vindr_cxr:
+    root_path: null
+    metadata_path: null
+    image_directory: null
