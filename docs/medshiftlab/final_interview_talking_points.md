@@ -2,23 +2,23 @@
 
 ## 30-Second Project Pitch
 
-MedShiftLab-CXR is a research framework for testing whether pretrained chest X-ray models remain reliable when labels are uncertain and data come from a different hospital dataset. I have built the data contracts, uncertainty handling, evaluation metrics, model-independent interfaces, experiment runners, reports, and focused tests needed for that study. The next step is to connect authorized CheXpert and VinDr-CXR data and run the planned experiments; I do not yet claim real-image benchmark results or clinical validity.
+MedShiftLab-CXR is a research framework for testing whether pretrained chest X-ray models remain reliable when labels are uncertain and data come from a different dataset. I have built the data contracts, uncertainty handling, evaluation metrics, model-independent interfaces, experiment runners, reports, and focused tests needed for that study. The repository also tracks aggregate artifacts from a prior standalone 1,000-image CheXpert subset run. I treat that as a pre-freeze smoke/subset record, not a completed benchmark, external validation, clinical validation, or integrated package inference pipeline.
 
 ## 2-Minute Project Explanation
 
 Pretrained medical imaging models can look strong on an internal test set but behave differently when annotation rules, patient populations, scanners, or acquisition protocols change. My research question is: how do annotation uncertainty, dataset curation choices, and cross-dataset distribution shift influence the robustness, calibration, and failure modes of pretrained chest X-ray foundation models?
 
-The planned study uses CheXpert internally because its uncertainty labels allow controlled comparison of U-ignore, U-zero, U-one, and U-soft. After fixing the uncertainty policy, model configuration, thresholds, and any calibration procedure using CheXpert only, I would evaluate once on VinDr-CXR as strict external validation. VinDr-CXR would not be used for tuning or model selection.
+The planned study uses CheXpert for development and internal evaluation because its uncertainty labels allow controlled comparison of U-ignore, U-zero, U-one, and U-soft. After fixing the uncertainty policy, model configuration, thresholds, and any calibration procedure using CheXpert only, I would evaluate on MIMIC-CXR-JPG and/or VinDr-CXR as strict external validation. External candidates would not be used for tuning, model selection, or protocol editing after freeze.
 
 The current repository implements the research scaffold rather than the final benchmark. It validates metadata and labels, computes label-wise discrimination and calibration metrics, standardizes model outputs through adapter contracts, joins predictions to records by image identity, and produces reproducible JSON and CSV reports through in-memory and file-exporting experiment runners. A focused test suite verifies these layers without requiring real images or TorchXRayVision execution.
 
-The next step is to connect authorized CheXpert images and metadata, add reproducible pretrained-model preprocessing and inference behind the existing adapter, compare uncertainty strategies internally, freeze the protocol, and then perform VinDr-CXR external validation with reliability and failure analysis.
+The next steps are local/private data configuration and registry, reusable package-level image loading, then inference integration behind the adapter. After internal evaluation under the frozen protocol, external validation may be performed on an authorized candidate with reliability and failure analysis.
 
 ## Technical Explanation
 
-### Why CheXpert Is Internal and VinDr-CXR Is External
+### Why CheXpert Is Internal and the External Candidates Are Separate
 
-CheXpert is the internal dataset because it exposes uncertain labels and therefore supports controlled policy comparison, internal evaluation, and—if used—validation-only threshold selection or calibration fitting. VinDr-CXR has different data and annotation characteristics, making it useful as an independent test of transfer under distribution shift. Keeping its role external preserves the meaning of that test.
+CheXpert is the development/internal dataset because it exposes uncertain labels and therefore supports controlled policy comparison, internal evaluation, and—if used—validation-only threshold selection or calibration fitting. MIMIC-CXR-JPG and VinDr-CXR have different data and annotation characteristics and are external candidates. Keeping each selected candidate external preserves the meaning of the test.
 
 ### Why Uncertainty Strategies Matter
 
@@ -32,9 +32,9 @@ AUROC and AUPRC evaluate ranking but do not show whether predicted probabilities
 
 The adapter translates model-specific outputs into validated `PredictionRecord` and `PredictionBatch` contracts. Evaluation consumes only those stable contracts. This separation prevents model preprocessing or output conventions from leaking into metric logic, makes provenance and label coverage explicit, and allows model implementations to change without rewriting evaluation and reporting.
 
-### Why VinDr-CXR Cannot Be Used for Tuning
+### Why External Candidates Cannot Be Used for Tuning
 
-Using VinDr-CXR for threshold selection, calibration fitting, uncertainty-policy choice, or model selection would leak information from the external test set and produce an optimistic estimate of generalization. All such choices must be completed on CheXpert before the external evaluation configuration is frozen.
+Using an external candidate for threshold selection, calibration fitting, uncertainty-policy choice, model selection, or protocol editing would leak information from the external test set and produce an optimistic estimate of generalization. All such choices must be completed on CheXpert before the external evaluation configuration is frozen.
 
 ## What Is Actually Implemented
 
@@ -50,11 +50,14 @@ Using VinDr-CXR for threshold selection, calibration fitting, uncertainty-policy
 - complete JSON and label-wise CSV report exports
 - in-memory and file-exporting experiment runners
 - focused local MedShiftLab-CXR test runner
+- standalone scripts and tracked aggregate artifacts for a prior frontal-1000 TorchXRayVision subset run
 
 ## What Is Not Implemented Yet
 
-- real image preprocessing or inference
-- real CheXpert or VinDr-CXR benchmark runs
+- reusable package-level image loading and preprocessing
+- integrated real-image inference through `TorchXRayVisionAdapter.predict_records()`
+- a completed CheXpert benchmark or external validation run
+- dataset registry and local/private data configuration
 - model training
 - clinical validation
 - regulatory readiness
@@ -73,7 +76,7 @@ Using VinDr-CXR for threshold selection, calibration fitting, uncertainty-policy
 
 - **What is the scientific contribution?** It is a reproducible evaluation scaffold and study design that treats annotation policy, calibration, and dataset shift as first-class variables. It is not a claim of a novel network architecture.
 
-- **What would be the first real experiment?** Run one fixed pretrained CXR model on a locked CheXpert split, compare the four uncertainty strategies with the same label set and evaluation settings, then freeze the selected protocol before any VinDr-CXR evaluation.
+- **What would be the first frozen experiment?** Run one fixed pretrained CXR model on a locked CheXpert split, compare the four uncertainty strategies with the same label set and evaluation settings, then preserve the selected protocol before any external evaluation.
 
 - **How would you handle uncertainty labels?** I would run U-ignore, U-zero, U-one, and U-soft as explicit, documented conditions. Binary metrics would use binary targets; soft targets would contribute only to metrics that support them, such as Brier score and ECE.
 
@@ -90,9 +93,9 @@ Do not say:
 - “This is clinically validated.”
 - “I trained a foundation model.”
 - “This is state of the art.”
-- “VinDr-CXR was used for tuning.”
+- “An external validation dataset was used for tuning.”
 - “The system is deployment-ready.”
-- “The repository already contains real benchmark evidence.”
+- “The prior subset run is a completed benchmark or external validation.”
 - “The TorchXRayVision inference pipeline is complete.”
 
 ## Suggested Closing Statement

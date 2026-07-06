@@ -1,130 +1,60 @@
 # MedShiftLab-CXR Research Protocol
 
-## Project Title
+## Protocol status
 
-MedShiftLab-CXR: A Data-Centric Research Framework for Robust and Trustworthy Chest X-ray AI Under Annotation Uncertainty and Dataset Shift
+This document is the Phase 1 protocol freeze for MedShiftLab-CXR. It defines the intended study before formal external validation. Items described as planned are protocol commitments, not completed experiments or results.
 
-## 1. Research Motivation
+The tracked `chexpert_small_frontal1000_torchxrayvision` artifacts document a prior, pre-freeze subset execution through standalone scripts. They are smoke/subset artifacts only. They are not evidence of a completed benchmark, external validation, clinical validation, or integrated package-level inference.
 
-Medical imaging AI systems are often evaluated mainly by predictive performance on curated internal test sets. However, clinical reliability depends not only on model architecture, but also on data quality, annotation uncertainty, dataset composition, calibration, and distribution shift.
+## 1. Project objective
 
-MedShiftLab-CXR focuses on these data-centric factors in chest X-ray AI. The project does not aim to invent a new neural network architecture. Its contribution is a reproducible research framework for evaluating how dataset-level decisions influence robustness, calibration, and failure modes of pretrained chest X-ray models.
+MedShiftLab-CXR is a reproducible, data-centric framework for studying how annotation uncertainty, dataset curation, calibration, and cross-dataset shift affect pretrained chest X-ray classification models. The primary task is multi-label classification over a conservative, explicitly harmonized label set.
 
-## 2. Main Research Question
+The project evaluates fixed pretrained models and explicit data/evaluation policies. It does not aim to invent a new architecture, train a foundation model from scratch, or support clinical decision-making.
 
-How do annotation uncertainty, dataset curation choices, and cross-dataset distribution shift influence the robustness, calibration, and failure modes of pretrained chest X-ray foundation models?
+Primary research question:
 
-## 3. Sub-Questions
+> How do annotation uncertainty, dataset curation choices, and cross-dataset distribution shift influence the robustness, calibration, and failure modes of pretrained chest X-ray models?
 
-### RQ1: Annotation Uncertainty
+## 2. Dataset roles and cohorts
 
-How do different CheXpert uncertainty-label handling strategies affect model performance, calibration, and failure behavior?
+### 2.1 Development cohort: CheXpert
 
-Planned strategies:
+CheXpert is the development and internal-protocol dataset. Subject to authorized local access, it may be used for:
 
-- U-ignore: exclude uncertain labels from supervised metric computation for that label.
-- U-zero: treat uncertain labels as negative.
-- U-one: treat uncertain labels as positive.
-- U-soft: treat uncertain labels as soft labels, for example 0.5.
+- metadata and image-quality audit;
+- label harmonization and uncertainty-strategy comparison;
+- development split construction;
+- model and preprocessing smoke checks;
+- threshold selection and optional calibration fitting on the development validation split only;
+- internal evaluation on a held-out internal test split.
 
-### RQ2: Dataset Distribution
+All CheXpert development, validation, and internal-test partitions must be patient-disjoint when patient identifiers are available. The internal test split must not be used to choose preprocessing, labels, uncertainty policy, thresholds, calibration parameters, models, or hyperparameters.
 
-How do CheXpert and VinDr-CXR differ in label prevalence, available metadata, and image/domain characteristics?
+### 2.2 Internal validation
 
-### RQ3: External Generalization
+Internal validation means evaluation on a held-out, patient-disjoint CheXpert internal test split after all choices have been made using only the CheXpert development train/validation partitions.
 
-How much do performance and calibration degrade when a pretrained chest X-ray model is evaluated under cross-dataset shift?
+The split manifest, inclusion and exclusion rules, model identifier, preprocessing version, label mapping, uncertainty policies, fixed threshold policy, optional fitted calibrator, ECE binning, and bootstrap procedure must be recorded before internal-test evaluation. Any change prompted by internal-test results creates a new protocol version and requires a new untouched internal-test split where feasible.
 
-Primary validation direction:
+### 2.3 External validation candidates
 
-- CheXpert internal evaluation
-- VinDr-CXR strict external validation
+MIMIC-CXR-JPG and VinDr-CXR are candidate external validation datasets. The final external dataset may be one or both, depending on authorized access, label compatibility, metadata availability, and licensing constraints. Candidate status does not imply that external validation has been completed.
 
-### RQ4: Failure Analysis
+External datasets may be used only after the protocol and candidate-specific label mapping are frozen. They must not be used for:
 
-Which labels, uncertainty groups, and dataset conditions are associated with false positives, false negatives, high-confidence errors, and miscalibration?
+- training or fine-tuning;
+- threshold or calibration fitting;
+- hyperparameter tuning;
+- model, checkpoint, preprocessing, or uncertainty-strategy selection;
+- inclusion-rule optimization based on outcomes;
+- protocol editing in response to external performance.
 
-## 4. Scope
+External evaluation uses the model, preprocessing, thresholds, calibrator if any, labels, metrics, and analysis rules fixed from CheXpert development. Dataset-specific technical adaptations needed to read files or map already-prespecified labels must be documented without using external outcome results to optimize the protocol.
 
-The first implementation is intentionally limited to chest X-ray classification.
+## 3. Label harmonization
 
-In scope:
-
-- Chest X-ray only
-- CheXpert as the primary internal dataset
-- VinDr-CXR as the strict external validation dataset
-- Conservative common-label ontology
-- Annotation uncertainty analysis
-- Dataset curation analysis
-- Pretrained CXR model evaluation
-- Calibration analysis
-- Distribution-shift analysis
-- Simple robustness stress tests
-- Failure analysis
-- Reproducible documentation, configs, scripts, and tests
-
-Out of scope for the first implementation:
-
-- New neural network architecture design
-- Training a foundation model from scratch
-- CT implementation
-- MRI implementation
-- EEG or cognitive-score pipelines
-- Full-stack application development
-- FastAPI or frontend expansion
-- Federated learning
-- LangGraph agent work
-- Clinical diagnosis claims
-- Medical-device or regulatory claims
-- State-of-the-art performance claims
-
-## 5. Datasets
-
-### CheXpert
-
-CheXpert is the primary internal dataset because it provides large-scale chest X-ray labels with explicit uncertainty annotations.
-
-Planned roles:
-
-- Metadata audit
-- Label distribution analysis
-- Uncertainty-label strategy comparison
-- Internal evaluation
-- Threshold selection
-- Optional calibration fitting
-
-Raw data are not included in this repository. Users must obtain datasets according to the original access rules and licenses.
-
-### VinDr-CXR
-
-VinDr-CXR is the strict external validation dataset.
-
-Planned roles:
-
-- External validation
-- Cross-dataset label distribution comparison
-- Calibration degradation analysis
-- Failure analysis
-- Optional qualitative review using available annotations
-
-VinDr-CXR must not be used for training, threshold tuning, calibration fitting, model selection, or uncertainty strategy selection.
-
-### Future Datasets
-
-The following datasets are future extensions only:
-
-- MIMIC-CXR
-- CT-RATE
-- BraTS
-- FastMRI
-
-They are not required for the first validated implementation.
-
-## 6. Label Protocol
-
-The first implementation uses a conservative shared label set across CheXpert and VinDr-CXR.
-
-Core pathology labels:
+The current conservative core labels are:
 
 - Atelectasis
 - Cardiomegaly
@@ -132,147 +62,141 @@ Core pathology labels:
 - Pneumonia
 - Pneumothorax
 
-No Finding is analyzed separately and is not treated as an equivalent pathology label.
+`No Finding` is analyzed separately and is not treated as a pathology label. The current CheXpert/VinDr-CXR mapping source is `configs/labels/cxr_common_labels.yaml`.
 
-The label mapping is stored in configs/labels/cxr_common_labels.yaml.
+Before evaluating any external candidate, its source labels must be mapped explicitly to the project ontology. Mapping decisions must be based on source definitions and annotation procedures, not observed model performance. Unsupported or materially non-equivalent labels must be excluded and documented. The project does not assume that identically named labels are clinically or operationally equivalent across datasets.
 
-All mappings must remain explicit, reviewable, and documented with limitations. The project does not claim that labels are perfectly equivalent across datasets.
+Any MIMIC-CXR-JPG mapping is future work and must be reviewed and frozen before that dataset is evaluated. Label additions, removals, or semantic changes after external results are inspected require a separately versioned protocol and cannot be presented as confirmatory evaluation under this freeze.
 
-## 7. Evaluation Protocol
+## 4. CheXpert uncertainty strategies
 
-The primary task is multi-label chest X-ray classification.
+CheXpert uncertain labels (`-1`) are evaluated under four explicit conditions:
 
-CheXpert is used for internal evaluation, uncertainty strategy comparison, threshold selection, and optional calibration fitting.
+- **U-ignore:** omit the uncertain target for that sample and label.
+- **U-zero:** map the uncertain target to `0`.
+- **U-one:** map the uncertain target to `1`.
+- **U-soft:** map the uncertain target to `0.5` unless a later protocol version prespecifies another value before evaluation.
 
-VinDr-CXR is reserved for strict external validation. It must not be used for training, fine-tuning, threshold tuning, calibration fitting, model selection, or uncertainty strategy selection.
+Missing labels remain missing. These strategies are modeling and evaluation policies, not clinical truth. Results must retain the strategy identifier. Binary discrimination and threshold metrics use targets equal to `0` or `1`; soft targets may contribute only to metrics that explicitly support probabilistic targets, such as Brier score and ECE.
 
-Splits must be patient-disjoint whenever patient identifiers are available. Image-level leakage across train, validation, and test splits is not acceptable.
+External datasets are evaluated according to their documented labels. CheXpert uncertainty transformations must not be imposed on an external dataset unless its annotation schema contains a justified, prespecified equivalent.
 
-## 8. Model Protocol
+## 5. Primary metrics and uncertainty estimates
 
-The first implementation uses pretrained chest X-ray models.
+The following are primary, label-wise metrics or outputs:
 
-Preferred starting point:
+- AUROC;
+- AUPRC;
+- F1;
+- sensitivity;
+- specificity;
+- Brier score;
+- Expected Calibration Error (ECE);
+- calibration curve;
+- bootstrap 95% confidence intervals.
 
-- TorchXRayVision pretrained CXR model
+F1, sensitivity, and specificity are primarily reported at a fixed threshold of `0.5`. A secondary label-specific threshold may be selected using CheXpert validation only, provided its selection rule and value are recorded before internal-test and external evaluation. No threshold may be selected or revised on an internal-test or external dataset.
 
-Optional extension only if integration remains simple:
+AUROC and AUPRC are reported only when both binary classes are represented. Every metric must include its available sample count and applicable positive/negative counts. Undefined metrics remain undefined rather than being imputed.
 
-- RAD-DINO frozen feature extraction with a simple linear head
+Confidence intervals use a prespecified percentile bootstrap with 2,000 replicates. Resampling is performed at patient level when patient identifiers are available so that all images from one patient remain together. If patient identifiers are unavailable, image-level resampling may be used only with that limitation stated. The random seed, software version, and resampling unit must be recorded. This bootstrap procedure is planned and is not yet implemented by the current evaluation package.
 
-Allowed operations:
+## 6. Calibration analysis
 
-- Pretrained inference
-- Frozen feature extraction
-- Linear probing, if feasible
-- Threshold selection on CheXpert validation only
-- Calibration fitting on CheXpert validation only
+Calibration analysis includes label-wise Brier score, ECE, and calibration curves. ECE and calibration curves use 10 equal-width probability bins over `[0, 1]` unless a future protocol version is frozen before evaluation. Empty-bin handling and bin counts must be recorded.
 
-Not allowed:
+If calibration fitting is performed, the method and parameters must be fitted using CheXpert validation only. The fitted calibrator must then be frozen and applied unchanged to CheXpert internal test and external datasets. Calibration must never be refitted on internal-test or external outcomes.
 
-- Architecture invention
-- Large-scale foundation model training
-- Claiming model superiority or SOTA
-- Tuning on external validation data
+Calibration results must be reported separately by dataset and label. They must not be described as clinical confidence or deployment readiness. The tracked prior subset artifacts contain aggregate Brier/ECE values, but they do not constitute the complete frozen calibration analysis defined here.
 
-## 9. Metrics
+## 7. Subgroup analysis
 
-Primary metrics are reported per label:
+Where the required metadata exist and use is permitted, results are stratified by:
 
-- AUROC
-- AUPRC
-- Brier score
-- Expected Calibration Error
+- sex, using source-dataset categories without inferring missing identity;
+- age group: `<40`, `40–64`, `>=65`, and unknown;
+- view position: AP, PA, lateral, other, and unknown;
+- dataset source;
+- label uncertainty strategy.
 
-Secondary metrics:
+Subgroup reports must include support counts and class counts. Metrics requiring both classes are not reported for single-class subgroups. Missing attributes remain unknown rather than being inferred. Small or sparse groups must be identified, and subgroup comparisons must not be presented as causal, clinical, fairness, or population-generalization conclusions.
 
-- F1
-- Sensitivity
-- Specificity
-- Reliability diagrams
-- Confidence histograms
+## 8. Leakage-control rules
 
-Accuracy is not treated as the primary metric because multi-label chest X-ray datasets are imbalanced and accuracy can be misleading.
+The following controls are mandatory:
 
-## 10. Calibration Analysis
+1. Split by patient, not image, whenever patient identity is available.
+2. Deduplicate patients and images across development, validation, internal-test, and external cohorts where identifiers or safe hashes permit.
+3. Fit thresholds, calibrators, linear probes, and any learned preprocessing on CheXpert development data only.
+4. Keep CheXpert internal test unavailable for model and protocol selection.
+5. Keep external labels and results unavailable until the external validation freeze is recorded.
+6. Do not select labels, models, checkpoints, subgroups, exclusions, or metrics based on internal-test or external performance.
+7. Record all exclusions and failed samples; do not silently remove inference failures.
+8. Do not transfer restricted images, identifiers, private paths, or protected metadata into Git artifacts.
 
-Calibration is a first-class research output.
+Any known or suspected leakage invalidates the affected evaluation until the split and outputs are regenerated under a new recorded run.
 
-Planned outputs:
+## 9. External validation freeze rule
 
-- Label-wise ECE
-- Macro ECE
-- Brier score
-- Reliability diagrams
-- Confidence histograms
+Before computing performance on an external candidate, the following must be committed together as a versioned freeze:
 
-Calibration fitting, if performed, must use CheXpert validation data only. VinDr-CXR must remain untouched until external evaluation.
+- protocol version and Git commit;
+- external candidate and cohort definition;
+- patient/image inclusion and exclusion rules;
+- split and deduplication rules;
+- label harmonization table;
+- uncertainty policy;
+- model, weights identifier, and preprocessing specification;
+- thresholds and any CheXpert-fitted calibrator;
+- primary metrics, calibration bins, bootstrap procedure, and subgroup rules;
+- artifact schema and planned output locations.
 
-## 11. Distribution-Shift Analysis
+After external labels or performance results are inspected, none of these items may be changed for that confirmatory run. Corrections required for a software defect or invalid input must be documented, versioned, and rerun as a new analysis; both the reason and impact must be retained. Exploratory post-hoc analyses must be labeled exploratory and must not replace the frozen result.
 
-The project studies shift at three levels:
+## 10. Artifact and versioning rules
 
-- Label distribution shift between CheXpert and VinDr-CXR
-- Metadata shift, depending on available fields
-- Image or embedding shift using simple statistics or pretrained-model embeddings
+Each run must record, where applicable:
 
-Unavailable metadata must be documented rather than guessed or imputed without justification.
+- protocol version, run identifier, timestamp, and Git commit;
+- dataset name, authorized source/version, cohort manifest checksum, and split name;
+- model and weights identifier, dependency versions, device, and preprocessing version;
+- label ontology version, uncertainty strategy, thresholds, calibration settings, and random seeds;
+- sample counts, exclusions, failures, and output schema version.
 
-## 12. Robustness Stress Tests
+Raw medical images, restricted metadata, credentials, model weights, and predictions containing private absolute paths must not be committed. Local manifests and prediction tables remain outside Git unless licensing and privacy review explicitly permit a de-identified derivative. Commit-eligible artifacts should be aggregate, non-identifying outputs with provenance and limitations. Artifacts must not be silently overwritten; a changed protocol or input produces a new versioned run directory.
 
-Only simple, interpretable stress tests are included in the first implementation:
+Historical artifacts must retain their original context. The tracked frontal-1000 subset artifacts are pre-freeze standalone-script outputs and must remain distinguishable from future frozen internal or external evaluations.
 
-- Brightness shift
-- Contrast shift
-- Mild Gaussian noise
-- Resolution or downsampling shift
+## 11. Allowed and disallowed claims
 
-Out of scope:
+Allowed claims, when directly supported by repository contents:
 
-- Adversarial attacks
-- GAN-based augmentation
-- Diffusion-based augmentation
-- Synthetic pathology generation
-- Large augmentation search
+- MedShiftLab-CXR is a reproducible data-centric research scaffold.
+- The repository implements label ontology, uncertainty handling, metadata contracts, evaluation schemas and metrics, prediction contracts, experiment runners, and report export.
+- A tracked prior CheXpert frontal-1000 subset artifact set documents standalone TorchXRayVision execution under its stated limitations.
+- The protocol intends CheXpert for development/internal evaluation and MIMIC-CXR-JPG and/or VinDr-CXR as external validation candidates.
 
-## 13. Failure Analysis
+Disallowed claims:
 
-Failure analysis focuses on:
+- clinical validation, diagnostic utility, safety, or deployment readiness;
+- state-of-the-art, radiologist-level, or model-superiority claims;
+- completed benchmark or completed external validation claims;
+- generalization to hospitals, populations, devices, or workflows not evaluated under a frozen protocol;
+- perfect equivalence of labels across datasets;
+- completed package-level image loading or integrated adapter inference;
+- model training or fine-tuning that did not occur;
+- interpreting uncertainty transformations as clinical ground truth.
 
-- False positives
-- False negatives
-- High-confidence errors
-- Miscalibrated predictions
-- Errors associated with uncertain labels
-- Errors associated with external dataset shift
+## 12. Phase decisions
 
-Qualitative image examples, if included, are illustrative only and must not be presented as clinical interpretation.
+- **Phase 1:** freeze this research protocol and reconcile documentation status.
+- **Current inference boundary:** `scripts/run_torchxrayvision_inference.py` remains a standalone smoke/subset execution path. It is not integrated into `TorchXRayVisionAdapter.predict_records()`.
+- **Phase 2:** add local/private data configuration and a dataset registry without committing private paths or data.
+- **Phase 3:** add reusable package-level image loading and preprocessing.
+- **Phase 4:** integrate the prediction adapter interface with the reusable loading/inference path.
 
-## 14. Claims Allowed
+Dataset registry, reusable package-level image loading, and integrated adapter inference are explicitly deferred from Phase 1.
 
-The project may claim:
+## 13. Protocol deviations
 
-- It is a reproducible data-centric evaluation framework.
-- It studies pretrained chest X-ray AI under annotation uncertainty and dataset shift.
-- It uses CheXpert for internal uncertainty analysis.
-- It uses VinDr-CXR for strict external validation.
-- It prioritizes transparency, reproducibility, and honest limitations.
-
-## 15. Claims Not Allowed
-
-The project must not claim:
-
-- Clinical validation
-- Diagnostic performance for patient care
-- Medical-device readiness
-- Radiologist-level performance
-- State-of-the-art performance
-- Perfect label equivalence across datasets
-- Generalization to all hospitals
-- Full CT or MRI support in the first implementation
-
-## 16. Success Criterion
-
-The first implementation is successful if it produces a clean, reproducible, scientifically honest framework showing how annotation uncertainty and dataset shift affect pretrained chest X-ray model reliability.
-
-It is unsuccessful if it becomes a broad demo with many features but no focused scientific argument.
+Any deviation must identify the affected rule, rationale, date, Git commit, and whether outcomes had already been inspected. Deviations made after internal-test or external outcomes are known are exploratory unless a new independent evaluation cohort is reserved and a new protocol is frozen before its use.

@@ -30,6 +30,7 @@ Data-centric evaluation framework for pretrained chest X-ray foundation models u
 - `PredictionRecord` and `PredictionBatch` validate image identity, model identity, label coverage, and probability ranges.
 - `CXRModelAdapter` defines the model-independent prediction contract, and `MockCXRModelAdapter` provides deterministic test predictions.
 - The optional `TorchXRayVisionAdapter` maps externally supplied output columns into the standard prediction schema. It does not preprocess images, construct models, download weights, or run inference.
+- Separate standalone scripts provide a bounded image-loading and TorchXRayVision smoke/subset execution path. Tracked aggregate artifacts document one prior 1,000-image frontal CheXpert subset run.
 - The prediction-to-evaluation bridge joins data records and predictions by `image_id`, validates coverage and duplicates, and builds evaluation rows.
 
 ### Experiment and Reporting Layer
@@ -47,10 +48,11 @@ Data-centric evaluation framework for pretrained chest X-ray foundation models u
 
 ## Planned or Future Components
 
-- real TorchXRayVision preprocessing and inference integration
+- local/private data configuration and dataset registry
+- reusable package-level image loading and preprocessing
+- real TorchXRayVision inference integration through the adapter interface
 - CheXpert internal evaluation using authorized actual metadata and images
-- VinDr-CXR external validation using authorized actual metadata and images
-- optional MIMIC-CXR extension after the primary cross-dataset protocol is stable
+- MIMIC-CXR-JPG and/or VinDr-CXR external validation under the frozen protocol
 - optional robustness stress tests
 - optional calibration fitting using CheXpert validation data only, without external-test leakage
 - optional richer comparison reports and figures
@@ -62,10 +64,10 @@ The project currently does not claim:
 
 - clinical validity
 - diagnostic deployment readiness
-- real pretrained model inference results
+- completed benchmark or external validation results
+- fully integrated package-level inference
 - training a new foundation model
 - state-of-the-art performance
-- real CheXpert or VinDr-CXR benchmark results
 - FDA, CE, or other regulatory readiness
 
 ## PhD Relevance
