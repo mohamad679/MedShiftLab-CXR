@@ -19,6 +19,7 @@ venv/
 # Large/local medical datasets
 /data/
 /datasets/
+/configs/data/local_paths.yaml
 /CheXpert*/
 /VinDr*/
 /MIMIC*/

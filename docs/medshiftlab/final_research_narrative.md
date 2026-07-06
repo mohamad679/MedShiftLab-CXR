@@ -68,7 +68,7 @@ The project is grounded in radiological imaging through a focused multi-label ch
 ## Next Steps
 
 1. Connect authorized CheXpert metadata and images without committing private or licensed data.
-2. Add local/private data configuration and a dataset registry.
+2. Configure authorized paths only in the ignored local registry configuration.
 3. Add reusable package-level image loading and preprocessing.
 4. Integrate pretrained prediction through the adapter contract.
 5. Compare U-ignore, U-zero, U-one, and U-soft on the locked CheXpert internal protocol.

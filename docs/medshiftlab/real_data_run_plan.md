@@ -9,7 +9,7 @@ Raw images, protected metadata exports, and other restricted dataset files must 
 Current status and planned run order:
 
 1. retain the tracked pre-freeze metadata and frontal-1000 standalone subset artifacts with their stated limitations
-2. add local/private data configuration and a dataset registry
+2. configure authorized paths in the ignored local registry configuration
 3. add reusable package-level image loading
 4. integrate the adapter inference interface
 5. execute the frozen CheXpert development/internal protocol

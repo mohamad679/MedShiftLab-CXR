@@ -17,6 +17,7 @@ Data-centric evaluation framework for pretrained chest X-ray foundation models u
 - The CheXpert schema parses metadata rows into validated records; the CSV loader reads metadata only and does not load images.
 - The VinDr-CXR schema parses image-level metadata and binary labels into validated records; raw annotation aggregation is not implemented.
 - Dataset summary utilities report record, patient, missing-label, prevalence, and target-count statistics from validated records.
+- A registry defines CheXpert, MIMIC-CXR-JPG, and VinDr-CXR roles and required local path fields. A tracked null-only template is separated from the ignored real local configuration.
 
 ### Evaluation Layer
 
@@ -48,7 +49,6 @@ Data-centric evaluation framework for pretrained chest X-ray foundation models u
 
 ## Planned or Future Components
 
-- local/private data configuration and dataset registry
 - reusable package-level image loading and preprocessing
 - real TorchXRayVision inference integration through the adapter interface
 - CheXpert internal evaluation using authorized actual metadata and images
