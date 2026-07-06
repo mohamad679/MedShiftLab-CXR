@@ -58,7 +58,7 @@ The project is grounded in radiological imaging through a focused multi-label ch
 
 ## Current Limitations
 
-- Standalone subset inference exists, but reusable package-level image loading and integrated adapter inference are incomplete.
+- Reusable package-level image loading is implemented and synthetic-tested; integrated adapter inference remains incomplete.
 - No completed CheXpert benchmark or external validation is reported.
 - No model training is implemented or claimed.
 - No clinical validation has been performed.
@@ -69,10 +69,9 @@ The project is grounded in radiological imaging through a focused multi-label ch
 
 1. Connect authorized CheXpert metadata and images without committing private or licensed data.
 2. Configure authorized paths only in the ignored local registry configuration.
-3. Add reusable package-level image loading and preprocessing.
-4. Integrate pretrained prediction through the adapter contract.
-5. Compare U-ignore, U-zero, U-one, and U-soft on the locked CheXpert internal protocol.
-6. Evaluate the frozen study configuration on MIMIC-CXR-JPG and/or VinDr-CXR as strict external validation.
-7. If calibration fitting is used, fit it only on CheXpert validation data and keep external candidates untouched.
-8. Generate reliability diagrams, confidence summaries, and label-wise failure analyses.
-9. Consider CT or MRI extensions only after the CXR framework has been evaluated under its frozen CXR protocol.
+3. Integrate pretrained prediction through the adapter contract.
+4. Compare U-ignore, U-zero, U-one, and U-soft on the locked CheXpert internal protocol.
+5. Evaluate the frozen study configuration on MIMIC-CXR-JPG and/or VinDr-CXR as strict external validation.
+6. If calibration fitting is used, fit it only on CheXpert validation data and keep external candidates untouched.
+7. Generate reliability diagrams, confidence summaries, and label-wise failure analyses.
+8. Consider CT or MRI extensions only after the CXR framework has been evaluated under its frozen CXR protocol.

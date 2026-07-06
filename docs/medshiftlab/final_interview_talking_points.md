@@ -12,7 +12,7 @@ The planned study uses CheXpert for development and internal evaluation because 
 
 The current repository implements the research scaffold rather than the final benchmark. It validates metadata and labels, computes label-wise discrimination and calibration metrics, standardizes model outputs through adapter contracts, joins predictions to records by image identity, and produces reproducible JSON and CSV reports through in-memory and file-exporting experiment runners. A focused test suite verifies these layers without requiring real images or TorchXRayVision execution.
 
-The next steps are reusable package-level image loading, then inference integration behind the adapter, using the local-only registry boundary without committing paths or data. After internal evaluation under the frozen protocol, external validation may be performed on an authorized candidate with reliability and failure analysis.
+The next step is inference integration behind the adapter using the tested local-only registry and package image-loading boundaries. After internal evaluation under the frozen protocol, external validation may be performed on an authorized candidate with reliability and failure analysis.
 
 ## Technical Explanation
 
@@ -42,6 +42,7 @@ Using an external candidate for threshold selection, calibration fitting, uncert
 - validated CheXpert metadata schema and CSV loader
 - validated VinDr-CXR metadata schema
 - dataset registry and path-free local configuration template
+- reusable JPEG/PNG loading and preprocessing tested with temporary synthetic images
 - dataset summary generator
 - AUROC, AUPRC, Brier score, ECE, F1, sensitivity, and specificity
 - `EvaluationReport` schema and row-based evaluation table interface
@@ -55,7 +56,6 @@ Using an external candidate for threshold selection, calibration fitting, uncert
 
 ## What Is Not Implemented Yet
 
-- reusable package-level image loading and preprocessing
 - integrated real-image inference through `TorchXRayVisionAdapter.predict_records()`
 - a completed CheXpert benchmark or external validation run
 - model training

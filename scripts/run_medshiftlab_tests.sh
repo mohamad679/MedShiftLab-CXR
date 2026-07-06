@@ -8,6 +8,7 @@ cd "$repo_root"
 PYTHONPATH=src:. pytest -o addopts='' --noconftest \
   tests/test_medshiftlab_data_layer.py \
   tests/test_medshiftlab_data_registry.py \
+  tests/test_medshiftlab_image_loader.py \
   tests/test_medshiftlab_evaluation_metrics.py \
   tests/test_medshiftlab_evaluation_report.py \
   tests/test_medshiftlab_evaluation_table.py \
