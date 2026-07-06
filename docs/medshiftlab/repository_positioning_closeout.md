@@ -46,4 +46,4 @@ Remote CI is deferred because the current dependency installation path is not cl
 
 ## Next Dependency
 
-Stage 11 will produce the final PhD application package, including the final project narrative, implemented-versus-planned summary, and interview framing.
+This historical closeout predates the tracked standalone frontal-1000 subset artifacts. Those artifacts document a bounded smoke/subset execution, while the focused test boundary still does not execute real model inference or image loading. Current phase sequencing is defined in `docs/medshiftlab/research_protocol.md`: Phase 2 covers local/private data configuration and registry, Phase 3 reusable image loading, and Phase 4 adapter inference integration.

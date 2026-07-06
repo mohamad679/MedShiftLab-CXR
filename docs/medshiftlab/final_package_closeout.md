@@ -3,7 +3,9 @@
 ## Final Status
 
 MedShiftLab-CXR is ready as a PhD-application research scaffold.
-It is not a clinical product, and it does not claim benchmark results yet.
+It is not a clinical product, and it does not claim a completed benchmark or external validation.
+
+Tracked aggregate artifacts document a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. This pre-freeze smoke/subset record does not represent integrated package-level inference, a completed benchmark, or clinical validation.
 
 ## Core Project Identity
 
@@ -45,7 +47,7 @@ bash scripts/run_medshiftlab_tests.sh
 
 Current expected focused-test result:
 
-- 108 tests passing in the MedShiftLab-CXR boundary
+- Run the command above; the exact count is recorded in the current phase audit rather than frozen in this historical closeout.
 
 ## Explicit Non-Claims
 
@@ -53,7 +55,8 @@ The package does not claim:
 
 - clinical validation
 - diagnostic deployment readiness
-- real CheXpert/VinDr benchmark results
+- completed CheXpert benchmark or external validation results
+- fully integrated package-level image inference
 - a trained foundation model
 - state-of-the-art performance
 - regulatory readiness

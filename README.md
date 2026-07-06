@@ -25,6 +25,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - In-memory and file-exporting experiment runners
 - Focused test runner
 - Real CheXpert CheXbert metadata-analysis outputs
+- Standalone scripts for a bounded TorchXRayVision image-inference path
 
 ## Real CheXpert metadata analysis
 
@@ -36,6 +37,12 @@ The current real-data artifact set was produced from a local CheXpert `train_che
 - Strategies compared: `U-ignore`, `U-zero`, `U-one`, and `U-soft`
 
 This is metadata analysis, not image inference and not model benchmarking.
+
+## Prior subset inference artifact
+
+The repository also tracks aggregate artifacts and documentation from a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. See [the run documentation](docs/medshiftlab/real_image_inference/chexpert_small_frontal1000.md) and [derived result summary](results/real_runs/chexpert_small_frontal1000_torchxrayvision/README.md).
+
+This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its image loading and inference path is implemented in standalone scripts. Reusable package-level image loading, a dataset registry, and `TorchXRayVisionAdapter.predict_records()` integration remain incomplete.
 
 ## Results and figures
 
@@ -74,7 +81,9 @@ Raw and restricted medical datasets must remain outside Git.
 ## Current limitations
 
 - No clinical validation or diagnostic deployment
-- No real pretrained model inference yet and no image loading yet
+- No completed benchmark or external validation
+- No reusable package-level image loader or dataset registry
+- No integrated real-image inference through `TorchXRayVisionAdapter.predict_records()`
 - No model training
 - No state-of-the-art (SOTA) or regulatory claim
 - No hosted live demo
@@ -82,14 +91,14 @@ Raw and restricted medical datasets must remain outside Git.
 
 ## What is not claimed
 
-This repository includes no clinical validation, diagnostic deployment, real pretrained model inference, image loading, model training, hosted live demo, or frontend/API in the active project. It makes no SOTA or regulatory claim. The committed CheXpert outputs characterize metadata and label-target distributions only.
+This repository includes no clinical validation, diagnostic deployment, completed benchmark, external validation, model training, hosted live demo, or frontend/API. It makes no SOTA or regulatory claim. The tracked prior subset inference artifacts do not establish clinical performance, generalization, or package-level inference integration.
 
 ## Suggested next steps
 
-1. Add authorized local image loading without committing raw data.
-2. Run optional pretrained-model inference with locked preprocessing and provenance.
-3. Evaluate robustness and calibration across uncertainty strategies.
-4. Perform strict external validation on VinDr-CXR after the internal CheXpert protocol is fixed.
+1. Add local/private data configuration and a dataset registry without committing private paths.
+2. Add reusable package-level image loading and preprocessing.
+3. Integrate the prediction adapter interface with the reusable inference path.
+4. Run the frozen internal protocol before any strict external validation on MIMIC-CXR-JPG and/or VinDr-CXR.
 
 ## Citation/status note
 

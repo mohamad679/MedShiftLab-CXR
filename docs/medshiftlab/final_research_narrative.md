@@ -2,7 +2,7 @@
 
 ## Abstract
 
-MedShiftLab-CXR addresses a central problem in medical computer vision: a pretrained model's apparent performance can depend strongly on uncertain labels, dataset construction, and the population or acquisition domain used for evaluation. The project implements a reproducible chest X-ray research scaffold that separates validated metadata and label handling, model-independent prediction contracts, label-wise performance and calibration metrics, and structured experiment reporting. It establishes the software and protocol needed for future CheXpert internal evaluation and strict VinDr-CXR external validation; it does not yet report results from real images or pretrained-model inference.
+MedShiftLab-CXR addresses a central problem in medical computer vision: a pretrained model's apparent performance can depend strongly on uncertain labels, dataset construction, and the population or acquisition domain used for evaluation. The project implements a reproducible chest X-ray research scaffold that separates validated metadata and label handling, model-independent prediction contracts, label-wise performance and calibration metrics, and structured experiment reporting. Tracked aggregate artifacts document a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. That pre-freeze smoke/subset record is not a completed benchmark, external validation, clinical validation, or integrated package-level inference pipeline.
 
 ## Motivation
 
@@ -16,8 +16,8 @@ Pretrained medical imaging models can fail even when their architecture is uncha
 
 - Use CheXpert as the internal dataset for metadata audit, uncertainty analysis, and internal evaluation.
 - Compare four explicit CheXpert uncertainty strategies: U-ignore, U-zero, U-one, and U-soft.
-- Use VinDr-CXR only for strict external validation under dataset shift.
-- Do not use VinDr-CXR for tuning, calibration fitting, model selection, threshold selection, or uncertainty-strategy selection.
+- Use MIMIC-CXR-JPG and/or VinDr-CXR only as external validation candidates under dataset shift.
+- Do not use an external candidate for tuning, calibration fitting, model selection, threshold selection, uncertainty-strategy selection, or post-result protocol editing.
 - Integrate a pretrained CXR model through the model adapter contract before considering broader model comparisons.
 - Report label-wise AUROC, AUPRC, Brier score, expected calibration error (ECE), F1, sensitivity, and specificity.
 - Preserve dataset, split, model, uncertainty-strategy, threshold, and ECE-bin provenance in each evaluation report.
@@ -58,8 +58,8 @@ The project is grounded in radiological imaging through a focused multi-label ch
 
 ## Current Limitations
 
-- No real image inference is implemented yet.
-- No real CheXpert or VinDr-CXR benchmark results are reported yet.
+- Standalone subset inference exists, but reusable package-level image loading and integrated adapter inference are incomplete.
+- No completed CheXpert benchmark or external validation is reported.
 - No model training is implemented or claimed.
 - No clinical validation has been performed.
 - No medical-device, FDA, CE, or other regulatory claim is made.
@@ -68,10 +68,11 @@ The project is grounded in radiological imaging through a focused multi-label ch
 ## Next Steps
 
 1. Connect authorized CheXpert metadata and images without committing private or licensed data.
-2. Add reproducible preprocessing and run predictions from a pretrained CXR model through the adapter contract.
-3. Compare U-ignore, U-zero, U-one, and U-soft on the locked CheXpert internal protocol.
-4. Evaluate the frozen study configuration on VinDr-CXR as strict external validation.
-5. If calibration fitting is used, fit it only on CheXpert validation data and keep VinDr-CXR untouched.
-6. Generate reliability diagrams, confidence summaries, and label-wise failure analyses.
-7. Consider MIMIC-CXR only after the primary CheXpert-to-VinDr-CXR study is stable.
-8. Consider CT or MRI extensions only after the CXR framework has been validated.
+2. Add local/private data configuration and a dataset registry.
+3. Add reusable package-level image loading and preprocessing.
+4. Integrate pretrained prediction through the adapter contract.
+5. Compare U-ignore, U-zero, U-one, and U-soft on the locked CheXpert internal protocol.
+6. Evaluate the frozen study configuration on MIMIC-CXR-JPG and/or VinDr-CXR as strict external validation.
+7. If calibration fitting is used, fit it only on CheXpert validation data and keep external candidates untouched.
+8. Generate reliability diagrams, confidence summaries, and label-wise failure analyses.
+9. Consider CT or MRI extensions only after the CXR framework has been evaluated under its frozen CXR protocol.
