@@ -30,6 +30,10 @@ def test_evaluate_binary_label_perfect_predictions() -> None:
     assert metrics.f1 == 1.0
     assert metrics.sensitivity == 1.0
     assert metrics.specificity == 1.0
+    assert metrics.true_positive == 2
+    assert metrics.false_positive == 0
+    assert metrics.true_negative == 2
+    assert metrics.false_negative == 0
 
 
 def test_evaluate_binary_label_uses_soft_targets_for_brier_and_ece() -> None:

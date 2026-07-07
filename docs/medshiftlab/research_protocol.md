@@ -195,7 +195,8 @@ Disallowed claims:
 - **Phase 3:** add reusable package-level image loading and preprocessing.
 - **Phase 4:** standardize the prediction output schema and adapter interface before adding real model adapters.
 - **Phase 5:** integrate a safe baseline adapter inference path on top of the reusable loading and standardized prediction layers.
-- **Phase 6:** add evaluation orchestration and run-control around the baseline inference path without broadening it into a full-dataset default.
+- **Phase 6:** add evaluation orchestration for standardized prediction files and manual-only run-control around the baseline inference path without broadening it into a full-dataset default.
+- **Current prediction-evaluation boundary:** local standardized prediction JSON/CSV files may be evaluated against a matching local label CSV through `scripts/run_real_prediction_evaluation.py`. Bootstrap confidence intervals and calibration-figure export remain deferred until a later phase.
 
 Dataset registry, reusable package-level image loading, prediction schema standardization, and adapter inference are explicitly deferred from Phase 1.
 

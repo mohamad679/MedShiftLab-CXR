@@ -76,6 +76,10 @@ class EvaluationReport(BaseModel):
                 "f1": metrics.f1,
                 "sensitivity": metrics.sensitivity,
                 "specificity": metrics.specificity,
+                "true_positive": metrics.true_positive,
+                "false_positive": metrics.false_positive,
+                "true_negative": metrics.true_negative,
+                "false_negative": metrics.false_negative,
             }
             rows.append(row)
 

@@ -28,6 +28,10 @@ _LABEL_METRICS_HEADER = (
     "f1",
     "sensitivity",
     "specificity",
+    "true_positive",
+    "false_positive",
+    "true_negative",
+    "false_negative",
 )
 
 
