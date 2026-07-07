@@ -20,6 +20,7 @@ venv/
 /data/
 /datasets/
 /configs/data/local_paths.yaml
+/configs/data/local_inference_manifest.csv
 /CheXpert*/
 /VinDr*/
 /MIMIC*/
@@ -46,6 +47,8 @@ checkpoints/
 # Temporary outputs
 tmp/
 scratch/
+/outputs/local_predictions/
+/results/local_private_runs/
 
 # Local code indexing tools
 .codebase-memory/

@@ -22,6 +22,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Evaluation table interface
 - Standardized prediction schema and adapter protocol
 - Optional TorchXRayVision adapter boundary
+- Manual-only baseline TorchXRayVision inference path for small local subsets
 - Prediction-to-evaluation bridge
 - JSON/CSV export utilities
 - In-memory and file-exporting experiment runners
@@ -44,7 +45,7 @@ This is metadata analysis, not image inference and not model benchmarking.
 
 The repository also tracks aggregate artifacts and documentation from a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. See [the run documentation](docs/medshiftlab/real_image_inference/chexpert_small_frontal1000.md) and [derived result summary](results/real_runs/chexpert_small_frontal1000_torchxrayvision/README.md).
 
-This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading and a standardized prediction schema/adapter interface now exist independently, but `TorchXRayVisionAdapter.predict_records()` real inference integration remains incomplete.
+This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading, a standardized prediction schema/adapter interface, and a manual-only baseline TorchXRayVision inference path now exist. Real execution still requires authorized local data, explicit local configuration, optional dependencies, and an intentionally small subset limit by default.
 
 ## Results and figures
 
@@ -84,7 +85,7 @@ Raw and restricted medical datasets must remain outside Git.
 
 - No clinical validation or diagnostic deployment
 - No completed benchmark or external validation
-- No integrated real-image inference through `TorchXRayVisionAdapter.predict_records()`
+- No benchmark-grade or full-dataset integrated inference workflow
 - No model training
 - No state-of-the-art (SOTA) or regulatory claim
 - No hosted live demo
@@ -97,7 +98,7 @@ This repository includes no clinical validation, diagnostic deployment, complete
 ## Suggested next steps
 
 1. Populate the ignored local-path configuration only in an authorized local environment.
-2. Integrate a real adapter inference path on top of the standardized prediction schema and reusable image-loading path.
+2. Add evaluation orchestration around the manual-only baseline inference path without broadening the default path into full-dataset execution.
 3. Run the frozen internal protocol before any strict external validation on MIMIC-CXR-JPG and/or VinDr-CXR.
 
 ## Citation/status note

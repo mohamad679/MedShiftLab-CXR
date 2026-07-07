@@ -157,9 +157,11 @@ class MockCXRModelAdapter:
 
         records: list[PredictionRecord] = []
         for image_record in image_records:
-            image_id = image_record.get("image_id")
-            if not isinstance(image_id, str):
-                raise ValueError("each image record must contain a string image_id")
+            sample_id = image_record.get("sample_id", image_record.get("image_id"))
+            if not isinstance(sample_id, str):
+                raise ValueError(
+                    "each image record must contain a string sample_id or image_id"
+                )
             image_path = image_record.get("image_path")
             if image_path is not None and not isinstance(image_path, str):
                 raise ValueError("image_path must be a string or None")
@@ -168,13 +170,21 @@ class MockCXRModelAdapter:
                 raise ValueError(
                     "each image record must contain a non-empty string dataset_name"
                 )
+            patient_id = image_record.get("patient_id")
+            if patient_id is not None and not isinstance(patient_id, str):
+                raise ValueError("patient_id must be a string or None")
+            study_id = image_record.get("study_id")
+            if study_id is not None and not isinstance(study_id, str):
+                raise ValueError("study_id must be a string or None")
 
             records.append(
                 PredictionRecord(
-                    image_id=image_id,
+                    sample_id=sample_id,
                     image_path=image_path,
                     dataset_name=dataset_name,
                     model_name=self.model_name,
+                    patient_id=patient_id,
+                    study_id=study_id,
                     label_names=self.labels,
                     probabilities=tuple(
                         self._default_score for _ in self.labels

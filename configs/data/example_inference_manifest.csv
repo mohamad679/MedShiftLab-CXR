@@ -1,0 +1,3 @@
+sample_id,dataset_name,image_path,patient_id,study_id
+example-0001,chexpert,train/patient00001/study1/view1_frontal.jpg,patient00001,study1
+example-0002,chexpert,train/patient00002/study1/view1_frontal.jpg,patient00002,study1

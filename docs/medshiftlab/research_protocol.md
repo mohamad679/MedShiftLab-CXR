@@ -183,20 +183,21 @@ Disallowed claims:
 - completed benchmark or completed external validation claims;
 - generalization to hospitals, populations, devices, or workflows not evaluated under a frozen protocol;
 - perfect equivalence of labels across datasets;
-- integrated real adapter inference or completed benchmark-grade adapter integration;
+- completed benchmark-grade adapter integration, full-dataset baseline inference, or any inference result presented as confirmatory evaluation without the frozen protocol steps above;
 - model training or fine-tuning that did not occur;
 - interpreting uncertainty transformations as clinical ground truth.
 
 ## 12. Phase decisions
 
 - **Phase 1:** freeze this research protocol and reconcile documentation status.
-- **Current inference boundary:** `scripts/run_torchxrayvision_inference.py` remains a standalone smoke/subset execution path. It is not integrated into `TorchXRayVisionAdapter.predict_records()`.
+- **Current inference boundary:** `TorchXRayVisionAdapter.predict_records()` and `scripts/run_baseline_inference.py` provide a manual-only local baseline inference path for small subsets. They require authorized local data, explicit local configuration, optional dependencies, and an externally initialized or explicitly authorized local model-init step. They do not establish benchmark completion, external validation, or clinical validation.
 - **Phase 2:** add local/private data configuration and a dataset registry without committing private paths or data.
 - **Phase 3:** add reusable package-level image loading and preprocessing.
 - **Phase 4:** standardize the prediction output schema and adapter interface before adding real model adapters.
-- **Phase 5:** integrate a real adapter inference path on top of the reusable loading and standardized prediction layers.
+- **Phase 5:** integrate a safe baseline adapter inference path on top of the reusable loading and standardized prediction layers.
+- **Phase 6:** add evaluation orchestration and run-control around the baseline inference path without broadening it into a full-dataset default.
 
-Dataset registry, reusable package-level image loading, prediction schema standardization, and integrated adapter inference are explicitly deferred from Phase 1.
+Dataset registry, reusable package-level image loading, prediction schema standardization, and adapter inference are explicitly deferred from Phase 1.
 
 ## 13. Protocol deviations
 

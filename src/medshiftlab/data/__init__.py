@@ -27,6 +27,10 @@ from medshiftlab.data.image_loader import (
     resolve_dataset_image_path,
     summarize_dataset_images,
 )
+from medshiftlab.data.inference_manifest import (
+    InferenceManifestRecord,
+    load_inference_manifest_csv,
+)
 from medshiftlab.data.registry import (
     DATASET_REGISTRY,
     EXAMPLE_LOCAL_PATHS_CONFIG,
@@ -67,6 +71,7 @@ __all__ = [
     "ImageLoadIssue",
     "ImageLoadSummary",
     "ImagePreprocessingConfig",
+    "InferenceManifestRecord",
     "LabelSummary",
     "LocalDataConfig",
     "LoadedImage",
@@ -76,6 +81,7 @@ __all__ = [
     "get_dataset_registry_entry",
     "discover_dataset_image_paths",
     "iter_chexpert_metadata_csv",
+    "load_inference_manifest_csv",
     "load_chexpert_metadata_csv",
     "load_example_local_data_config",
     "load_dataset_image",
