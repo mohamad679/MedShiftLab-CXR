@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 import pytest
 
 from medshiftlab.data import CheXpertRecord
 from medshiftlab.evaluation import EvaluationReport
 from medshiftlab.models import (
+    PREDICTION_SCHEMA_VERSION,
     PredictionBatch,
     PredictionRecord,
     build_evaluation_rows_from_records_and_predictions,
@@ -58,8 +61,14 @@ def _batch(
 ) -> PredictionBatch:
     return PredictionBatch(
         model_name="mock-cxr",
+        model_version="mock-cxr:v1",
+        adapter_name="mock-adapter",
+        preprocessing_version="preprocess-v1",
+        preprocessing_config={"output_mode": "grayscale"},
         records=predictions,
-        labels=labels,
+        label_names=labels,
+        created_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+        schema_version=PREDICTION_SCHEMA_VERSION,
     )
 
 
@@ -141,13 +150,9 @@ def test_duplicate_record_image_id_is_rejected() -> None:
         )
 
 
-def test_duplicate_prediction_image_id_is_rejected() -> None:
-    with pytest.raises(ValueError, match="duplicate prediction image_id"):
-        build_evaluation_rows_from_records_and_predictions(
-            records=[_record("img001")],
-            predictions=_batch([_prediction("img001"), _prediction("img001")]),
-            labels=LABELS,
-        )
+def test_duplicate_prediction_sample_id_is_rejected() -> None:
+    with pytest.raises(ValueError, match="duplicate prediction sample_id"):
+        _batch([_prediction("img001"), _prediction("img001")])
 
 
 def test_missing_prediction_for_record_is_rejected() -> None:

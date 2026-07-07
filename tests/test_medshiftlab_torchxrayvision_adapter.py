@@ -16,6 +16,7 @@ from medshiftlab.models import (
 def _config() -> TorchXRayVisionAdapterConfig:
     return TorchXRayVisionAdapterConfig(
         model_name="torchxrayvision-densenet121",
+        model_version="torchxrayvision-densenet121:external-init",
         labels=("Atelectasis", "Cardiomegaly"),
         output_indices={"Atelectasis": 1, "Cardiomegaly": 0},
     )
@@ -47,6 +48,7 @@ def test_config_rejects_empty_labels() -> None:
     with pytest.raises(ValueError):
         TorchXRayVisionAdapterConfig(
             model_name="model-a",
+            model_version="model-a:v1",
             labels=(),
             output_indices={},
         )
@@ -56,6 +58,7 @@ def test_config_rejects_missing_output_index() -> None:
     with pytest.raises(ValueError, match="Cardiomegaly"):
         TorchXRayVisionAdapterConfig(
             model_name="model-a",
+            model_version="model-a:v1",
             labels=("Atelectasis", "Cardiomegaly"),
             output_indices={"Atelectasis": 0},
         )
@@ -65,6 +68,7 @@ def test_config_rejects_negative_output_index() -> None:
     with pytest.raises(ValueError, match="non-negative"):
         TorchXRayVisionAdapterConfig(
             model_name="model-a",
+            model_version="model-a:v1",
             labels=("Atelectasis",),
             output_indices={"Atelectasis": -1},
         )
@@ -74,6 +78,7 @@ def test_config_rejects_non_integer_output_index() -> None:
     with pytest.raises(ValueError):
         TorchXRayVisionAdapterConfig(
             model_name="model-a",
+            model_version="model-a:v1",
             labels=("Atelectasis",),
             output_indices={"Atelectasis": 0.5},
         )
@@ -81,12 +86,18 @@ def test_config_rejects_non_integer_output_index() -> None:
 
 def test_predict_scores_from_outputs_maps_to_prediction_batch() -> None:
     batch = _adapter().predict_scores_from_outputs(
-        image_records=[{"image_id": "img001"}, {"image_id": "img002"}],
+        image_records=[
+            {"image_id": "img001", "dataset_name": "CheXpert"},
+            {"image_id": "img002", "dataset_name": "CheXpert"},
+        ],
         model_outputs=[[0.8, 0.2], [0.3, 0.7]],
     )
 
     assert isinstance(batch, PredictionBatch)
     assert batch.model_name == "torchxrayvision-densenet121"
+    assert batch.model_version == "torchxrayvision-densenet121:external-init"
+    assert batch.adapter_name == "torchxrayvision-adapter"
+    assert batch.preprocessing_version == "torchxrayvision-preprocessing-v1"
     assert batch.labels == ("Atelectasis", "Cardiomegaly")
     assert [record.scores for record in batch.records] == [
         {"Atelectasis": 0.2, "Cardiomegaly": 0.8},
@@ -107,6 +118,7 @@ def test_predict_scores_from_outputs_preserves_image_metadata() -> None:
     )
 
     record = batch.records[0]
+    assert record.sample_id == "img001"
     assert record.image_id == "img001"
     assert record.image_path == "images/img001.png"
     assert record.dataset_name == "CheXpert"
@@ -115,7 +127,7 @@ def test_predict_scores_from_outputs_preserves_image_metadata() -> None:
 def test_predict_scores_from_outputs_rejects_length_mismatch() -> None:
     with pytest.raises(ValueError, match="equal lengths"):
         _adapter().predict_scores_from_outputs(
-            image_records=[{"image_id": "img001"}],
+            image_records=[{"image_id": "img001", "dataset_name": "CheXpert"}],
             model_outputs=[],
         )
 
@@ -126,8 +138,16 @@ def test_predict_scores_from_outputs_rejects_invalid_probability(
 ) -> None:
     with pytest.raises(ValueError, match="between 0 and 1"):
         _adapter().predict_scores_from_outputs(
-            image_records=[{"image_id": "img001"}],
+            image_records=[{"image_id": "img001", "dataset_name": "CheXpert"}],
             model_outputs=[[0.8, invalid_score]],
+        )
+
+
+def test_predict_scores_from_outputs_rejects_missing_dataset_name() -> None:
+    with pytest.raises(ValueError, match="dataset_name"):
+        _adapter().predict_scores_from_outputs(
+            image_records=[{"image_id": "img001"}],
+            model_outputs=[[0.8, 0.2]],
         )
 
 
