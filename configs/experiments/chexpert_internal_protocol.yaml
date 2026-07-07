@@ -1,0 +1,41 @@
+project: MedShiftLab-CXR
+experiment: chexpert_internal_protocol
+dataset: chexpert
+role: internal_protocol_scaffolding
+status: manual_local_only
+prediction_schema_version: medshiftlab.prediction.v1
+preprocessing_version: medshiftlab.image_loader.v1
+protocol_reference: configs/protocol/chexpert_internal.yaml
+label_set_reference: configs/labels/cxr_common_labels.yaml
+evaluation_runner: scripts/run_real_prediction_evaluation.py
+evaluation_inputs:
+  predictions: future_local_prediction_batch_json_or_csv
+  labels: chexpert_labels_{strategy_slug}.csv
+metrics:
+  primary:
+    - AUROC
+    - AUPRC
+    - F1
+    - sensitivity
+    - specificity
+    - Brier score
+    - ECE
+  planned_outputs:
+    - confusion_matrix
+    - calibration_curve
+    - bootstrap_95ci
+uncertainty_strategies:
+  - U-ignore
+  - U-zero
+  - U-one
+  - U-soft
+safe_defaults:
+  subset_limit: 256
+  allow_large_run: false
+output_conventions:
+  local_private_root: results/local_private_runs/chexpert_internal_protocol/
+  prediction_filename_pattern: predictions_{strategy_slug}.json
+  evaluation_filename_pattern: evaluation_{strategy_slug}.json
+notes:
+  - This config defines reproducible local protocol scaffolding only.
+  - It does not imply completed inference, evaluation, benchmark, or clinical validation.

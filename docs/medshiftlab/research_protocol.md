@@ -197,6 +197,8 @@ Disallowed claims:
 - **Phase 5:** integrate a safe baseline adapter inference path on top of the reusable loading and standardized prediction layers.
 - **Phase 6:** add evaluation orchestration for standardized prediction files and manual-only run-control around the baseline inference path without broadening it into a full-dataset default.
 - **Current prediction-evaluation boundary:** local standardized prediction JSON/CSV files may be evaluated against a matching local label CSV through `scripts/run_real_prediction_evaluation.py`. Bootstrap confidence intervals and calibration-figure export remain deferred until a later phase.
+- **Phase 7:** add CheXpert internal protocol scaffolding only: patient-level split manifests, explicit uncertainty-strategy label-table materialization, reproducible protocol configs, and manual-only preparation through `scripts/prepare_chexpert_internal_protocol.py`.
+- **Current internal-protocol boundary:** the Phase 7 utilities prepare local/private CheXpert split and label artifacts that are compatible with the Phase 6 evaluation path once real local prediction files exist. They do not themselves run full CheXpert inference, generate completed internal benchmark results, or change the prohibition on benchmark, external-validation, clinical-validation, or SOTA claims.
 
 Dataset registry, reusable package-level image loading, prediction schema standardization, and adapter inference are explicitly deferred from Phase 1.
 
