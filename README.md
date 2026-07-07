@@ -1,126 +1,132 @@
 # MedShiftLab-CXR
 
-## Overview
+MedShiftLab-CXR is a reproducible research scaffold for studying pretrained chest X-ray classification models under annotation uncertainty and cross-dataset shift. The repository packages conservative data, prediction, evaluation, and reporting infrastructure for local/manual research workflows. It does not present a completed benchmark, external validation study, or clinical system.
 
-MedShiftLab-CXR is a reproducible research scaffold and data-centric evaluation framework for studying pretrained chest X-ray foundation models under annotation uncertainty and cross-dataset distribution shift.
+## Objective
 
-MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. The repository is a reproducible research scaffold and data-centric evaluation framework.
+The project objective is to support a controlled research workflow around one question:
 
-## Research question
+> How do annotation uncertainty, dataset curation choices, and cross-dataset distribution shift influence the robustness, calibration, and failure modes of pretrained chest X-ray models?
 
-“How do annotation uncertainty, dataset curation choices, and cross-dataset distribution shift influence the robustness, calibration, and failure modes of pretrained chest X-ray foundation models?”
+## Current implemented scope
 
-## What is implemented
+- Research protocol and documentation for conservative claim boundaries
+- Chest X-ray label ontology and explicit uncertainty handling
+- Local/private dataset registry with a tracked null-only config template
+- Reusable image loading, preprocessing, path-containment, and bounded smoke-test utilities
+- Standardized prediction schema and model-adapter contract
+- Safe adapter registry with mock adapters and a manual optional TorchXRayVision boundary
+- Manual-only bounded baseline inference entry point for small authorized local subsets
+- Standardized prediction evaluation for local JSON/CSV prediction artifacts plus matching label CSVs
+- CheXpert internal protocol preparation with patient-level split manifests and uncertainty-strategy label tables
+- External-validation setup preparation for `mimic_cxr_jpg` and `vindr_cxr`
+- Robustness, calibration-bin, subgroup, bootstrap, and failure-flag scaffolding over existing prediction artifacts
+- JSON/CSV reporting exports, in-memory runners, and focused tests
 
-- Label ontology and uncertainty handling
-- CheXpert metadata schema and loader
-- VinDr-CXR metadata schema
-- Dataset registry and path-free local configuration template
-- Reusable JPEG/PNG image loading, path containment, and preprocessing
-- Dataset summary generator
-- Evaluation metrics and `EvaluationReport` schema
-- Evaluation table interface
-- Standardized prediction schema and adapter protocol
-- Path-free model-adapter candidate registry and safe adapter factory
-- Optional TorchXRayVision adapter boundary
-- Manual-only baseline TorchXRayVision inference path for small local subsets
-- Mock-compatible generic foundation-model adapter scaffold with no real backend integration
-- Standardized prediction-evaluation orchestration for local prediction files
-- Manual-only robustness, calibration-bin, deterministic bootstrap-CI, subgroup, and non-clinical failure-flag scaffolding for standardized prediction artifacts
-- CheXpert internal protocol scaffolding with patient-disjoint split manifests and uncertainty-strategy label-table materialization
-- External-validation setup scaffolding for MIMIC-CXR-JPG and VinDr-CXR with label harmonization and manifest validation
-- Prediction-to-evaluation bridge
-- JSON/CSV export utilities
-- In-memory and file-exporting experiment runners
-- Focused test runner
-- Real CheXpert CheXbert metadata-analysis outputs
-- Standalone scripts for a bounded TorchXRayVision image-inference path
+## Explicit limitations
 
-## Real CheXpert metadata analysis
+- No full-dataset inference workflow is run by default
+- No completed CheXpert benchmark
+- No completed MIMIC-CXR-JPG or VinDr-CXR external validation
+- No real benchmark results are committed as part of the package
+- No training, fine-tuning, LoRA, or PEFT workflow
+- No automatic model-weight download path
+- No calibration fitting or calibration-plot rendering
+- No hosted app, API, or clinical deployment surface
 
-The current real-data artifact set was produced from a local CheXpert `train_cheXbert.csv` file. Raw dataset files and images are not committed.
+## What is not claimed
 
-- `n_records = 223414`
-- `n_patients = 64540`
-- `n_records_without_patient_id = 0`
-- Strategies compared: `U-ignore`, `U-zero`, `U-one`, and `U-soft`
+This repository does not claim:
 
-This is metadata analysis, not image inference and not model benchmarking.
+- benchmark completion
+- external validation completion
+- clinical validation
+- diagnostic utility
+- deployment readiness
+- state-of-the-art performance
+- final model performance
+- regulatory readiness
 
-## Prior subset inference artifact
+Tracked infrastructure or bounded local/manual scripts should not be interpreted as completed experiments.
 
-The repository also tracks aggregate artifacts and documentation from a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. See [the run documentation](docs/medshiftlab/real_image_inference/chexpert_small_frontal1000.md) and [derived result summary](results/real_runs/chexpert_small_frontal1000_torchxrayvision/README.md).
+## Safe setup
 
-This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading, a standardized prediction schema/adapter interface, and a manual-only baseline TorchXRayVision inference path now exist. Real execution still requires authorized local data, explicit local configuration, optional dependencies, and an intentionally small subset limit by default.
+Create a Python 3.11 environment and install the package in editable mode:
 
-Standardized prediction evaluation is also available for local prediction JSON/CSV files and matching local label CSV files. This path is manual-only, uses the existing evaluation/report schema, and does not by itself establish benchmark completion, external validation, or clinical validation.
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e .[dev]
+```
 
-CheXpert internal protocol scaffolding is also available through local/manual preparation utilities. This currently covers patient-level split assignment, reproducible protocol configs, and Phase 6-compatible label-table generation under explicit uncertainty strategies. It does not by itself run real inference, produce completed internal benchmark results, or establish external or clinical validation.
+Only if you intentionally plan to exercise the manual optional TorchXRayVision baseline path:
 
-External-validation setup scaffolding is also available through local/manual preparation utilities for MIMIC-CXR-JPG and VinDr-CXR. This currently covers dataset-specific label harmonization configs, external manifest validation, optional patient-overlap checks against internal manifests, and Phase 6-compatible external label-table generation. It does not by itself run real external validation, produce completed benchmark results, or establish clinical validation.
+```bash
+pip install -e .[dev,torchxrayvision]
+```
 
-The Phase 9 adapter registry records safe construction policy, dependency metadata, preprocessing requirements, checkpoint/source placeholders, and license/access notes. The generic foundation-model adapter is mock-only: real initialization is denied by default, no weights are downloaded, and explicit real-backend authorization still stops with a clear unsupported/dependency error until a reviewed integration exists.
+The repository does not include datasets, model weights, or private path configuration.
 
-Phase 10 analysis scaffolding is available through `scripts/run_robustness_calibration_analysis.py`. It consumes existing standardized prediction and label files, optionally joins sample-keyed subgroup metadata, exports equal-width calibration-bin data, can compute deterministic percentile bootstrap intervals, reports subgroup metrics and explicit skip reasons, and emits non-clinical degradation/calibration/coverage flags. Its default limit is bounded, larger runs require an explicit override, and generated private reports remain ignored. Calibration fitting and calibration-plot rendering are not implemented. No real robustness conclusion or validation result is committed.
-
-## Results and figures
-
-- [Analysis documentation](results/real_runs/chexpert_train_chexbert_uncertainty_comparison/README.md)
-- [Label summary CSV](results/real_runs/chexpert_train_chexbert_uncertainty_comparison/chexpert_uncertainty_strategy_label_summary.csv)
-- [Dataset summary CSV](results/real_runs/chexpert_train_chexbert_uncertainty_comparison/chexpert_uncertainty_strategy_dataset_summary.csv)
-- [Mean target by uncertainty strategy](figures/chexpert_train_chexbert_uncertainty_comparison/mean_target_by_uncertainty_strategy.png)
-- [Positive prevalence by uncertainty strategy](figures/chexpert_train_chexbert_uncertainty_comparison/positive_prevalence_by_uncertainty_strategy.png)
-- [Soft counts by label](figures/chexpert_train_chexbert_uncertainty_comparison/soft_counts_by_label.png)
-
-![Mean target by uncertainty strategy](figures/chexpert_train_chexbert_uncertainty_comparison/mean_target_by_uncertainty_strategy.png)
-
-![Positive prevalence by uncertainty strategy](figures/chexpert_train_chexbert_uncertainty_comparison/positive_prevalence_by_uncertainty_strategy.png)
-
-![Soft counts by label](figures/chexpert_train_chexbert_uncertainty_comparison/soft_counts_by_label.png)
-
-## How to run tests
+## Test command
 
 ```bash
 bash scripts/run_medshiftlab_tests.sh
 ```
 
+## Local/private data policy
+
+- Keep raw medical data, restricted metadata, model weights, and local outputs outside Git-tracked artifacts.
+- Copy `configs/data/example_local_paths.yaml` to `configs/data/local_paths.yaml` locally and populate only the ignored copy.
+- Use relative image paths inside manifests and label tables where the repository expects them.
+- Do not commit private absolute paths, prediction artifacts, evaluation artifacts, or credentials.
+
+## Manual workflow overview
+
+1. Freeze the intended study boundary in [the research protocol](docs/medshiftlab/research_protocol.md).
+2. Populate the ignored local config from [configs/data/example_local_paths.yaml](configs/data/example_local_paths.yaml).
+3. Validate local dataset-path configuration and run a bounded image-loading smoke test.
+4. If authorized, run bounded manual baseline inference on a small manifest.
+5. Evaluate standardized prediction files against matching local label tables.
+6. Prepare internal or external protocol artifacts before any real larger run.
+7. Run robustness/calibration/subgroup analysis only on existing local prediction artifacts.
+
+Command examples are in [docs/medshiftlab/reproducibility_guide.md](docs/medshiftlab/reproducibility_guide.md).
+
+## Reproducibility commands
+
+Minimal verification:
+
+```bash
+bash scripts/run_medshiftlab_tests.sh
+```
+
+Manual/local workflow commands for registry validation, image smoke tests, bounded inference, evaluation, protocol preparation, and robustness analysis are documented in [docs/medshiftlab/reproducibility_guide.md](docs/medshiftlab/reproducibility_guide.md).
+
 ## Repository structure
 
 ```text
-src/medshiftlab/       Core data, label, model-boundary, evaluation, experiment, and reporting modules
-scripts/               Metadata-summary, plotting, and focused-test entry points
-tests/                 Focused MedShiftLab-CXR tests
-docs/medshiftlab/      Research protocol and implementation documentation
-results/real_runs/     Commit-eligible derived summaries from authorized local runs
-figures/               Generated research figures
+src/medshiftlab/                     Core data, model-boundary, evaluation, experiment, and reporting modules
+scripts/                             Manual/local CLI entry points
+configs/                             Path-free tracked configs, protocol YAML, label mappings, and examples
+tests/                               Focused MedShiftLab-CXR tests
+docs/medshiftlab/                    Research protocol, closeout, reproducibility, and packaging docs
+docs/medshiftlab/templates/          Reusable documentation templates
 ```
 
-Raw and restricted medical datasets must remain outside Git.
+## Documentation map
 
-## Current limitations
-
-- No clinical validation or diagnostic deployment
-- No completed benchmark or external validation
-- No benchmark-grade or full-dataset integrated inference workflow
-- No completed full-dataset prediction-evaluation workflow
-- No completed real robustness, calibration, or subgroup analysis
-- No model training
-- No model fine-tuning or LoRA/PEFT integration
-- No real foundation-model backend beyond the manual-only TorchXRayVision baseline path
-- No state-of-the-art (SOTA) or regulatory claim
-- No hosted live demo
-- No frontend/API in the active project
-
-## What is not claimed
-
-This repository includes no clinical validation, diagnostic deployment, completed benchmark, completed external validation, model training or fine-tuning, hosted live demo, or frontend/API. It makes no SOTA or regulatory claim. The tracked prior subset inference artifacts do not establish clinical performance or generalization.
+- [Research protocol](docs/medshiftlab/research_protocol.md)
+- [Phase 11 final project closeout](docs/medshiftlab/final_project_closeout.md)
+- [Reproducibility guide](docs/medshiftlab/reproducibility_guide.md)
+- [CV-ready project summary](docs/medshiftlab/cv_project_summary.md)
+- [Manuscript outline](docs/medshiftlab/manuscript_outline.md)
+- [Experiment card template](docs/medshiftlab/templates/experiment_card_template.md)
+- [Limitations](docs/medshiftlab/limitations.md)
 
 ## Suggested next steps
 
-1. Populate the ignored local-path configuration only in an authorized local environment.
-2. Run the local/manual CheXpert internal protocol scaffolding to generate patient-disjoint manifests and uncertainty-specific label tables before any real internal evaluation.
-3. Use the external-validation setup scaffolding to freeze label harmonization and cohort manifests before any real local external prediction/evaluation run.
-
-## Citation/status note
-
-This repository is an active PhD-application research scaffold, not a clinically validated system. No formal paper citation is assigned yet; cite the repository and the exact release tag used when referencing these artifacts.
+1. Keep this branch documentation-only and review the claim boundaries one more time before merge.
+2. Tag a closeout snapshot after tests pass and docs are approved.
+3. If real experiments are later authorized, create versioned local-only run directories and experiment cards for each run.
+4. Treat any future full inference, internal evaluation, or external validation as a new explicitly approved phase.
