@@ -56,12 +56,12 @@ Using an external candidate for threshold selection, calibration fitting, uncert
 
 ## What Is Not Implemented Yet
 
-- integrated real-image inference through `TorchXRayVisionAdapter.predict_records()`
+- benchmark-grade or full-dataset integrated inference through `TorchXRayVisionAdapter.predict_records()`
 - a completed CheXpert benchmark or external validation run
 - model training
 - clinical validation
 - regulatory readiness
-- a completed TorchXRayVision inference pipeline
+- a completed benchmark-grade TorchXRayVision inference pipeline
 - CT or MRI extension
 
 ## Likely Committee Questions

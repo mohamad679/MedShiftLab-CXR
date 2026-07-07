@@ -97,7 +97,8 @@ def test_predict_scores_from_outputs_maps_to_prediction_batch() -> None:
     assert batch.model_name == "torchxrayvision-densenet121"
     assert batch.model_version == "torchxrayvision-densenet121:external-init"
     assert batch.adapter_name == "torchxrayvision-adapter"
-    assert batch.preprocessing_version == "torchxrayvision-preprocessing-v1"
+    assert batch.preprocessing_version == "phase5-baseline-inference-v1"
+    assert batch.preprocessing_config["image_loader"] == "phase3-package-loader"
     assert batch.labels == ("Atelectasis", "Cardiomegaly")
     assert [record.scores for record in batch.records] == [
         {"Atelectasis": 0.2, "Cardiomegaly": 0.8},
@@ -151,6 +152,6 @@ def test_predict_scores_from_outputs_rejects_missing_dataset_name() -> None:
         )
 
 
-def test_predict_records_explicitly_rejects_real_inference() -> None:
-    with pytest.raises(NotImplementedError, match="intentionally not implemented"):
+def test_predict_records_requires_local_data_config() -> None:
+    with pytest.raises(ValueError, match="local_data_config"):
         _adapter().predict_records([{"image_id": "img001"}])
