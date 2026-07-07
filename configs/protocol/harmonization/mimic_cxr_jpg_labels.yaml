@@ -1,0 +1,35 @@
+version: 1
+dataset: mimic_cxr_jpg
+label_set_reference: configs/labels/cxr_common_labels.yaml
+mapped_labels:
+  Atelectasis: Atelectasis
+  Cardiomegaly: Cardiomegaly
+  Pleural Effusion: Pleural Effusion
+  Pneumonia: Pneumonia
+  Pneumothorax: Pneumothorax
+  No Finding: No Finding
+sample_id_columns:
+  - sample_id
+  - image_id
+  - dicom_id
+image_path_columns:
+  - image_path
+  - path
+  - Path
+patient_id_columns:
+  - patient_id
+  - subject_id
+study_id_columns:
+  - study_id
+split_columns:
+  - split
+view_position_columns:
+  - view_position
+  - ViewPosition
+known_metadata_columns:
+  - dicom_id
+  - subject_id
+  - study_id
+  - split
+  - view_position
+  - ViewPosition
