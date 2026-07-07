@@ -25,6 +25,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Manual-only baseline TorchXRayVision inference path for small local subsets
 - Standardized prediction-evaluation orchestration for local prediction files
 - CheXpert internal protocol scaffolding with patient-disjoint split manifests and uncertainty-strategy label-table materialization
+- External-validation setup scaffolding for MIMIC-CXR-JPG and VinDr-CXR with label harmonization and manifest validation
 - Prediction-to-evaluation bridge
 - JSON/CSV export utilities
 - In-memory and file-exporting experiment runners
@@ -52,6 +53,8 @@ This prior run is a smoke/subset execution record, not a completed benchmark, ex
 Standardized prediction evaluation is also available for local prediction JSON/CSV files and matching local label CSV files. This path is manual-only, uses the existing evaluation/report schema, and does not by itself establish benchmark completion, external validation, or clinical validation.
 
 CheXpert internal protocol scaffolding is also available through local/manual preparation utilities. This currently covers patient-level split assignment, reproducible protocol configs, and Phase 6-compatible label-table generation under explicit uncertainty strategies. It does not by itself run real inference, produce completed internal benchmark results, or establish external or clinical validation.
+
+External-validation setup scaffolding is also available through local/manual preparation utilities for MIMIC-CXR-JPG and VinDr-CXR. This currently covers dataset-specific label harmonization configs, external manifest validation, optional patient-overlap checks against internal manifests, and Phase 6-compatible external label-table generation. It does not by itself run real external validation, produce completed benchmark results, or establish clinical validation.
 
 ## Results and figures
 
@@ -106,7 +109,7 @@ This repository includes no clinical validation, diagnostic deployment, complete
 
 1. Populate the ignored local-path configuration only in an authorized local environment.
 2. Run the local/manual CheXpert internal protocol scaffolding to generate patient-disjoint manifests and uncertainty-specific label tables before any real internal evaluation.
-3. Add stricter external-validation cohort scaffolding and label-harmonization manifests for MIMIC-CXR-JPG and/or VinDr-CXR without broadening the default path into full-dataset execution.
+3. Use the external-validation setup scaffolding to freeze label harmonization and cohort manifests before any real local external prediction/evaluation run.
 
 ## Citation/status note
 

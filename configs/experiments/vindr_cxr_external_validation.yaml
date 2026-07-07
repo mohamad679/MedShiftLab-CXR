@@ -1,0 +1,33 @@
+project: MedShiftLab-CXR
+experiment: vindr_cxr_external_validation_setup
+dataset: vindr_cxr
+role: external_validation_candidate
+status: manual_local_only
+prediction_schema_version: medshiftlab.prediction.v1
+protocol_reference: configs/protocol/vindr_cxr_external.yaml
+label_harmonization_reference: configs/protocol/harmonization/vindr_cxr_labels.yaml
+evaluation_runner: scripts/run_real_prediction_evaluation.py
+no_tuning_controls:
+  threshold_tuning_allowed: false
+  hyperparameter_tuning_allowed: false
+  model_selection_allowed: false
+  protocol_edit_after_external_results_allowed: false
+metrics:
+  primary:
+    - AUROC
+    - AUPRC
+    - F1
+    - sensitivity
+    - specificity
+    - Brier score
+    - ECE
+safe_defaults:
+  subset_limit: 256
+  allow_large_run: false
+output_conventions:
+  local_private_root: results/local_private_runs/vindr_cxr_external_validation/
+  manifest_filename: vindr_cxr_external_manifest.csv
+  label_table_filename: vindr_cxr_external_labels.csv
+notes:
+  - Setup scaffolding only.
+  - No real external evaluation is performed by this configuration alone.

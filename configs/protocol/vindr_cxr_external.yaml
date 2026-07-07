@@ -1,0 +1,18 @@
+version: 1
+dataset: vindr_cxr
+role: external_validation_candidate
+external_validation_only: true
+allow_threshold_tuning: false
+allow_hyperparameter_tuning: false
+allow_model_selection: false
+allow_protocol_edit_after_results: false
+label_set_reference: configs/labels/cxr_common_labels.yaml
+label_harmonization_reference: configs/protocol/harmonization/vindr_cxr_labels.yaml
+prediction_schema_version: medshiftlab.prediction.v1
+evaluation_metrics_reference: docs/medshiftlab/research_protocol.md#5-primary-metrics-and-uncertainty-estimates
+safe_default_limit: 256
+local_private_output_dir: results/local_private_runs/vindr_cxr_external_validation/
+notes:
+  - External-validation candidate only.
+  - Threshold tuning, hyperparameter tuning, model selection, and protocol edits based on external results are prohibited.
+  - Outputs from authorized local runs must remain private unless explicitly reviewed as safe derivatives.

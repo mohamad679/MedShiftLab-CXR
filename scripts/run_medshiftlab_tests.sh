@@ -9,6 +9,7 @@ PYTHONPATH=src:. pytest -o addopts='' --noconftest \
   tests/test_medshiftlab_data_layer.py \
   tests/test_medshiftlab_data_registry.py \
   tests/test_medshiftlab_chexpert_internal_protocol.py \
+  tests/test_medshiftlab_external_validation_protocol.py \
   tests/test_medshiftlab_baseline_inference.py \
   tests/test_medshiftlab_image_loader.py \
   tests/test_medshiftlab_evaluation_metrics.py \

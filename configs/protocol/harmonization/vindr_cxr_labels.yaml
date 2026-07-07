@@ -1,0 +1,38 @@
+version: 1
+dataset: vindr_cxr
+label_set_reference: configs/labels/cxr_common_labels.yaml
+mapped_labels:
+  Atelectasis: Atelectasis
+  Cardiomegaly: Cardiomegaly
+  Pleural effusion: Pleural Effusion
+  Pneumonia: Pneumonia
+  Pneumothorax: Pneumothorax
+  No finding: No Finding
+sample_id_columns:
+  - image_id
+  - ImageID
+  - sample_id
+image_path_columns:
+  - image_path
+  - path
+  - Path
+patient_id_columns:
+  - patient_id
+  - PatientID
+study_id_columns:
+  - study_id
+  - StudyID
+split_columns:
+  - split
+  - Split
+view_position_columns:
+  - view_position
+  - ViewPosition
+  - view
+known_metadata_columns:
+  - ImageID
+  - PatientID
+  - StudyID
+  - Split
+  - ViewPosition
+  - view
