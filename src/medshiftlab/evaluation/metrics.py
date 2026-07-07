@@ -33,6 +33,10 @@ class BinaryLabelMetrics(BaseModel):
     f1: float | None = None
     sensitivity: float | None = None
     specificity: float | None = None
+    true_positive: int | None = Field(default=None, ge=0)
+    false_positive: int | None = Field(default=None, ge=0)
+    true_negative: int | None = Field(default=None, ge=0)
+    false_negative: int | None = Field(default=None, ge=0)
 
 
 def evaluate_binary_label(
@@ -95,7 +99,15 @@ def evaluate_binary_label(
         n_bins=n_bins,
     )
 
-    f1, sensitivity, specificity = _threshold_metrics(
+    (
+        f1,
+        sensitivity,
+        specificity,
+        true_positive,
+        false_positive,
+        true_negative,
+        false_negative,
+    ) = _threshold_metrics(
         binary_targets,
         binary_scores,
         threshold=threshold,
@@ -115,6 +127,10 @@ def evaluate_binary_label(
         f1=f1,
         sensitivity=sensitivity,
         specificity=specificity,
+        true_positive=true_positive,
+        false_positive=false_positive,
+        true_negative=true_negative,
+        false_negative=false_negative,
     )
 
 
@@ -210,9 +226,17 @@ def _threshold_metrics(
     scores: Sequence[float],
     *,
     threshold: float,
-) -> tuple[float | None, float | None, float | None]:
+) -> tuple[
+    float | None,
+    float | None,
+    float | None,
+    int | None,
+    int | None,
+    int | None,
+    int | None,
+]:
     if not targets:
-        return None, None, None
+        return None, None, None, None, None, None, None
 
     predictions = [1.0 if score >= threshold else 0.0 for score in scores]
 
@@ -253,6 +277,10 @@ def _threshold_metrics(
         float(f1) if f1 is not None else None,
         float(sensitivity) if sensitivity is not None else None,
         float(specificity) if specificity is not None else None,
+        int(true_positive),
+        int(false_positive),
+        int(true_negative),
+        int(false_negative),
     )
 
 

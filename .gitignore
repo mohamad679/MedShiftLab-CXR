@@ -48,7 +48,9 @@ checkpoints/
 tmp/
 scratch/
 /outputs/local_predictions/
+/outputs/local_evaluations/
 /results/local_private_runs/
+/figures/local_private_runs/
 
 # Local code indexing tools
 .codebase-memory/

@@ -84,6 +84,10 @@ def test_csv_export_writes_one_row_per_label(tmp_path: Path) -> None:
         "f1",
         "sensitivity",
         "specificity",
+        "true_positive",
+        "false_positive",
+        "true_negative",
+        "false_negative",
     ]
 
 
