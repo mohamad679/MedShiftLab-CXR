@@ -46,16 +46,37 @@ class TorchXRayVisionAdapterConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     model_name: str = Field(min_length=1)
+    model_version: str = Field(min_length=1)
     labels: tuple[str, ...] = Field(min_length=1)
     output_indices: dict[str, StrictInt]
     device: str = Field(default="cpu", min_length=1)
+    adapter_name: str = Field(default="torchxrayvision-adapter", min_length=1)
+    preprocessing_version: str = Field(
+        default="torchxrayvision-preprocessing-v1",
+        min_length=1,
+    )
+    preprocessing_config: dict[str, object] = Field(
+        default_factory=lambda: {
+            "image_loader": "phase3-package-loader",
+            "inference_integration": "not-yet-implemented",
+        }
+    )
 
-    @field_validator("model_name", "device")
+    @field_validator(
+        "model_name",
+        "model_version",
+        "device",
+        "adapter_name",
+        "preprocessing_version",
+    )
     @classmethod
     def _strip_non_empty_string(cls, value: str) -> str:
         value = value.strip()
         if not value:
-            raise ValueError("model_name and device must not be empty")
+            raise ValueError(
+                "model_name, model_version, device, adapter_name, and "
+                "preprocessing_version must not be empty"
+            )
         return value
 
     @field_validator("labels")
@@ -113,6 +134,36 @@ class TorchXRayVisionAdapter:
 
         return self.config.labels
 
+    @property
+    def model_version(self) -> str:
+        """Return the configured model version or source identifier."""
+
+        return self.config.model_version
+
+    @property
+    def adapter_name(self) -> str:
+        """Return the configured adapter implementation identifier."""
+
+        return self.config.adapter_name
+
+    @property
+    def preprocessing_version(self) -> str:
+        """Return the configured preprocessing contract version."""
+
+        return self.config.preprocessing_version
+
+    @property
+    def preprocessing_config(self) -> Mapping[str, object]:
+        """Return preprocessing provenance for future real-inference wiring."""
+
+        return self.config.preprocessing_config
+
+    @property
+    def uncertainty_strategy(self) -> str | None:
+        """Return a fixed uncertainty strategy if this adapter carries one."""
+
+        return None
+
     def predict_scores_from_outputs(
         self,
         image_records: Sequence[Mapping[str, object]],
@@ -129,7 +180,7 @@ class TorchXRayVisionAdapter:
         ):
             image_id = _required_image_id(image_record, row_number)
             image_path = _optional_string(image_record, "image_path", row_number)
-            dataset_name = _optional_string(image_record, "dataset_name", row_number)
+            dataset_name = _required_dataset_name(image_record, row_number)
 
             scores: dict[str, float] = {}
             for label in self.labels:
@@ -159,14 +210,20 @@ class TorchXRayVisionAdapter:
                     image_path=image_path,
                     dataset_name=dataset_name,
                     model_name=self.model_name,
-                    scores=scores,
+                    label_names=self.labels,
+                    probabilities=tuple(scores[label] for label in self.labels),
                 )
             )
 
         return PredictionBatch(
             model_name=self.model_name,
+            model_version=self.model_version,
+            adapter_name=self.adapter_name,
+            preprocessing_version=self.preprocessing_version,
+            preprocessing_config=dict(self.preprocessing_config),
             records=predictions,
-            labels=self.labels,
+            label_names=self.labels,
+            uncertainty_strategy=self.uncertainty_strategy,
         )
 
     def predict_records(
@@ -185,6 +242,17 @@ def _required_image_id(image_record: Mapping[str, object], row_number: int) -> s
     if not isinstance(image_id, str):
         raise ValueError(f"image record {row_number} must contain a string image_id")
     return image_id
+
+
+def _required_dataset_name(
+    image_record: Mapping[str, object], row_number: int
+) -> str:
+    dataset_name = image_record.get("dataset_name")
+    if not isinstance(dataset_name, str) or not dataset_name.strip():
+        raise ValueError(
+            f"image record {row_number} must contain a non-empty string dataset_name"
+        )
+    return dataset_name.strip()
 
 
 def _optional_string(

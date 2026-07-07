@@ -6,6 +6,7 @@ from medshiftlab.models.evaluation_bridge import (
     create_evaluation_report_from_records_and_predictions,
 )
 from medshiftlab.models.prediction import (
+    PREDICTION_SCHEMA_VERSION,
     PredictionBatch,
     PredictionRecord,
     build_prediction_table_rows,
@@ -20,6 +21,7 @@ from medshiftlab.models.torchxrayvision_adapter import (
 __all__ = [
     "CXRModelAdapter",
     "MockCXRModelAdapter",
+    "PREDICTION_SCHEMA_VERSION",
     "PredictionBatch",
     "PredictionRecord",
     "TorchXRayVisionAdapter",

@@ -183,7 +183,7 @@ Disallowed claims:
 - completed benchmark or completed external validation claims;
 - generalization to hospitals, populations, devices, or workflows not evaluated under a frozen protocol;
 - perfect equivalence of labels across datasets;
-- completed package-level image loading or integrated adapter inference;
+- integrated real adapter inference or completed benchmark-grade adapter integration;
 - model training or fine-tuning that did not occur;
 - interpreting uncertainty transformations as clinical ground truth.
 
@@ -193,9 +193,10 @@ Disallowed claims:
 - **Current inference boundary:** `scripts/run_torchxrayvision_inference.py` remains a standalone smoke/subset execution path. It is not integrated into `TorchXRayVisionAdapter.predict_records()`.
 - **Phase 2:** add local/private data configuration and a dataset registry without committing private paths or data.
 - **Phase 3:** add reusable package-level image loading and preprocessing.
-- **Phase 4:** integrate the prediction adapter interface with the reusable loading/inference path.
+- **Phase 4:** standardize the prediction output schema and adapter interface before adding real model adapters.
+- **Phase 5:** integrate a real adapter inference path on top of the reusable loading and standardized prediction layers.
 
-Dataset registry, reusable package-level image loading, and integrated adapter inference are explicitly deferred from Phase 1.
+Dataset registry, reusable package-level image loading, prediction schema standardization, and integrated adapter inference are explicitly deferred from Phase 1.
 
 ## 13. Protocol deviations
 

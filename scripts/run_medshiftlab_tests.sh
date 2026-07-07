@@ -13,6 +13,7 @@ PYTHONPATH=src:. pytest -o addopts='' --noconftest \
   tests/test_medshiftlab_evaluation_report.py \
   tests/test_medshiftlab_evaluation_table.py \
   tests/test_medshiftlab_model_adapter.py \
+  tests/test_medshiftlab_prediction_schema.py \
   tests/test_medshiftlab_torchxrayvision_adapter.py \
   tests/test_medshiftlab_prediction_evaluation_bridge.py \
   tests/test_medshiftlab_reporting_exports.py \

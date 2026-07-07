@@ -20,7 +20,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Dataset summary generator
 - Evaluation metrics and `EvaluationReport` schema
 - Evaluation table interface
-- Prediction schemas and adapter protocol
+- Standardized prediction schema and adapter protocol
 - Optional TorchXRayVision adapter boundary
 - Prediction-to-evaluation bridge
 - JSON/CSV export utilities
@@ -44,7 +44,7 @@ This is metadata analysis, not image inference and not model benchmarking.
 
 The repository also tracks aggregate artifacts and documentation from a prior standalone TorchXRayVision run over a 1,000-image frontal CheXpert subset. See [the run documentation](docs/medshiftlab/real_image_inference/chexpert_small_frontal1000.md) and [derived result summary](results/real_runs/chexpert_small_frontal1000_torchxrayvision/README.md).
 
-This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading is now available independently, but `TorchXRayVisionAdapter.predict_records()` inference integration remains incomplete.
+This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading and a standardized prediction schema/adapter interface now exist independently, but `TorchXRayVisionAdapter.predict_records()` real inference integration remains incomplete.
 
 ## Results and figures
 
@@ -97,7 +97,7 @@ This repository includes no clinical validation, diagnostic deployment, complete
 ## Suggested next steps
 
 1. Populate the ignored local-path configuration only in an authorized local environment.
-2. Integrate the prediction adapter interface with the reusable image-loading path.
+2. Integrate a real adapter inference path on top of the standardized prediction schema and reusable image-loading path.
 3. Run the frozen internal protocol before any strict external validation on MIMIC-CXR-JPG and/or VinDr-CXR.
 
 ## Citation/status note
