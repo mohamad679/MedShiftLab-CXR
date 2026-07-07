@@ -24,6 +24,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Optional TorchXRayVision adapter boundary
 - Manual-only baseline TorchXRayVision inference path for small local subsets
 - Standardized prediction-evaluation orchestration for local prediction files
+- CheXpert internal protocol scaffolding with patient-disjoint split manifests and uncertainty-strategy label-table materialization
 - Prediction-to-evaluation bridge
 - JSON/CSV export utilities
 - In-memory and file-exporting experiment runners
@@ -49,6 +50,8 @@ The repository also tracks aggregate artifacts and documentation from a prior st
 This prior run is a smoke/subset execution record, not a completed benchmark, external validation, or clinical validation. Its inference path is implemented in standalone scripts. Package-level image loading, a standardized prediction schema/adapter interface, and a manual-only baseline TorchXRayVision inference path now exist. Real execution still requires authorized local data, explicit local configuration, optional dependencies, and an intentionally small subset limit by default.
 
 Standardized prediction evaluation is also available for local prediction JSON/CSV files and matching local label CSV files. This path is manual-only, uses the existing evaluation/report schema, and does not by itself establish benchmark completion, external validation, or clinical validation.
+
+CheXpert internal protocol scaffolding is also available through local/manual preparation utilities. This currently covers patient-level split assignment, reproducible protocol configs, and Phase 6-compatible label-table generation under explicit uncertainty strategies. It does not by itself run real inference, produce completed internal benchmark results, or establish external or clinical validation.
 
 ## Results and figures
 
@@ -102,8 +105,8 @@ This repository includes no clinical validation, diagnostic deployment, complete
 ## Suggested next steps
 
 1. Populate the ignored local-path configuration only in an authorized local environment.
-2. Add bootstrap/calibration artifacts and stricter run manifests around the manual-only prediction-evaluation path without broadening the default path into full-dataset execution.
-3. Run the frozen internal protocol before any strict external validation on MIMIC-CXR-JPG and/or VinDr-CXR.
+2. Run the local/manual CheXpert internal protocol scaffolding to generate patient-disjoint manifests and uncertainty-specific label tables before any real internal evaluation.
+3. Add stricter external-validation cohort scaffolding and label-harmonization manifests for MIMIC-CXR-JPG and/or VinDr-CXR without broadening the default path into full-dataset execution.
 
 ## Citation/status note
 

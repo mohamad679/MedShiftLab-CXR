@@ -1,0 +1,36 @@
+project: MedShiftLab-CXR
+protocol: chexpert_internal
+dataset: chexpert
+role: internal_protocol
+split_level: patient
+split_names:
+  - train
+  - validation
+  - test
+split_fractions:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+deterministic_seed_default: 2026
+supported_uncertainty_strategies:
+  - U-ignore
+  - U-zero
+  - U-one
+  - U-soft
+label_set_reference: configs/labels/cxr_common_labels.yaml
+preprocessing_reference:
+  version: medshiftlab.image_loader.v1
+  source: src/medshiftlab/data/image_loader.py
+prediction_schema_version: medshiftlab.prediction.v1
+evaluation_metrics_reference: docs/medshiftlab/research_protocol.md#5-primary-metrics-and-uncertainty-estimates
+safe_defaults:
+  subset_limit: 256
+  allow_large_run: false
+output_conventions:
+  local_private_root: results/local_private_runs/chexpert_internal_protocol/
+  split_manifest_filename: chexpert_internal_split_manifest.csv
+  label_table_filename_pattern: chexpert_labels_{strategy_slug}.csv
+notes:
+  - Development/internal protocol only.
+  - Split manifests and label tables must remain local/private unless explicitly reviewed as safe derivatives.
+  - External datasets must not be used for threshold tuning, model selection, or protocol edits after freeze.
