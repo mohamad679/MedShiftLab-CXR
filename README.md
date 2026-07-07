@@ -26,6 +26,7 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Manual-only baseline TorchXRayVision inference path for small local subsets
 - Mock-compatible generic foundation-model adapter scaffold with no real backend integration
 - Standardized prediction-evaluation orchestration for local prediction files
+- Manual-only robustness, calibration-bin, deterministic bootstrap-CI, subgroup, and non-clinical failure-flag scaffolding for standardized prediction artifacts
 - CheXpert internal protocol scaffolding with patient-disjoint split manifests and uncertainty-strategy label-table materialization
 - External-validation setup scaffolding for MIMIC-CXR-JPG and VinDr-CXR with label harmonization and manifest validation
 - Prediction-to-evaluation bridge
@@ -59,6 +60,8 @@ CheXpert internal protocol scaffolding is also available through local/manual pr
 External-validation setup scaffolding is also available through local/manual preparation utilities for MIMIC-CXR-JPG and VinDr-CXR. This currently covers dataset-specific label harmonization configs, external manifest validation, optional patient-overlap checks against internal manifests, and Phase 6-compatible external label-table generation. It does not by itself run real external validation, produce completed benchmark results, or establish clinical validation.
 
 The Phase 9 adapter registry records safe construction policy, dependency metadata, preprocessing requirements, checkpoint/source placeholders, and license/access notes. The generic foundation-model adapter is mock-only: real initialization is denied by default, no weights are downloaded, and explicit real-backend authorization still stops with a clear unsupported/dependency error until a reviewed integration exists.
+
+Phase 10 analysis scaffolding is available through `scripts/run_robustness_calibration_analysis.py`. It consumes existing standardized prediction and label files, optionally joins sample-keyed subgroup metadata, exports equal-width calibration-bin data, can compute deterministic percentile bootstrap intervals, reports subgroup metrics and explicit skip reasons, and emits non-clinical degradation/calibration/coverage flags. Its default limit is bounded, larger runs require an explicit override, and generated private reports remain ignored. Calibration fitting and calibration-plot rendering are not implemented. No real robustness conclusion or validation result is committed.
 
 ## Results and figures
 
@@ -100,6 +103,7 @@ Raw and restricted medical datasets must remain outside Git.
 - No completed benchmark or external validation
 - No benchmark-grade or full-dataset integrated inference workflow
 - No completed full-dataset prediction-evaluation workflow
+- No completed real robustness, calibration, or subgroup analysis
 - No model training
 - No model fine-tuning or LoRA/PEFT integration
 - No real foundation-model backend beyond the manual-only TorchXRayVision baseline path

@@ -187,6 +187,35 @@ def test_missing_label_rows_fail_clearly(tmp_path: Path) -> None:
         )
 
 
+def test_safe_limit_allows_labels_for_unselected_prediction_records(tmp_path: Path) -> None:
+    predictions_path = write_prediction_batch_json(
+        _prediction_batch(
+            [
+                _prediction_record("img001", atelectasis=0.1, cardiomegaly=0.9),
+                _prediction_record("img002", atelectasis=0.9, cardiomegaly=0.1),
+            ]
+        ),
+        tmp_path / "predictions.json",
+    )
+    labels_path = _write_labels_csv(
+        tmp_path,
+        [
+            {"sample_id": "img001", "Atelectasis": 0, "Cardiomegaly": 1},
+            {"sample_id": "img002", "Atelectasis": 1, "Cardiomegaly": 0},
+        ],
+    )
+
+    result, _ = run_prediction_batch_evaluation_from_files(
+        predictions_path=predictions_path,
+        labels_csv_path=labels_path,
+        config=PredictionEvaluationConfig(limit=1),
+    )
+
+    assert result.accounting.evaluated_records == 1
+    assert result.accounting.selected_label_rows == 1
+    assert result.accounting.skipped_records == 1
+
+
 def test_duplicate_label_rows_fail_clearly(tmp_path: Path) -> None:
     predictions_path = write_prediction_batch_json(
         _prediction_batch([_prediction_record("img001", atelectasis=0.1, cardiomegaly=0.9)]),

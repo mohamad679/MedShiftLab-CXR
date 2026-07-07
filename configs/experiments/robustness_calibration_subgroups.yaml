@@ -1,0 +1,43 @@
+project: MedShiftLab-CXR
+experiment: robustness_calibration_subgroups
+phase: 10
+status: manual_local_only
+prediction_schema_version: medshiftlab.prediction.v1
+evaluation_runner: scripts/run_real_prediction_evaluation.py
+analysis_runner: scripts/run_robustness_calibration_analysis.py
+supported_analysis:
+  calibration_bin_data: true
+  calibration_curve_csv: true
+  calibration_plot_export: false
+  deterministic_percentile_bootstrap: true
+  subgroup_metrics: true
+  non_clinical_failure_flags: true
+bootstrap:
+  protocol_iterations: 2000
+  safe_cli_default_iterations: 0
+  deterministic_seed_default: 2026
+  confidence_level: 0.95
+  resampling_unit_preference: patient_when_complete_patient_ids_are_available
+subgroup_columns:
+  - sex
+  - age_group
+  - view_position
+  - dataset_name
+  - split
+  - uncertainty_strategy
+safe_defaults:
+  subset_limit: 128
+  allow_large_run: false
+  minimum_subgroup_size: 20
+output_conventions:
+  local_private_root: results/local_private_runs/robustness_analysis/
+  report_filename: robustness_analysis.json
+  calibration_filename: calibration_bins.csv
+  subgroup_filename: subgroup_metrics.csv
+  bootstrap_filename: bootstrap_intervals.csv
+notes:
+  - Analysis consumes existing standardized prediction and label artifacts only.
+  - It does not run inference, fit calibration, train, or fine-tune a model.
+  - Thresholds for failure flags must be supplied explicitly and are non-clinical.
+  - Real outputs remain local/private unless separately reviewed.
+  - This configuration does not imply completed robustness analysis, external validation, benchmark, or clinical validation.

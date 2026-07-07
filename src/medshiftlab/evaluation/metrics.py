@@ -39,6 +39,34 @@ class BinaryLabelMetrics(BaseModel):
     false_negative: int | None = Field(default=None, ge=0)
 
 
+class CalibrationBin(BaseModel):
+    """One equal-width calibration bin for a label."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    bin_index: int = Field(ge=0)
+    lower_bound: float = Field(ge=0.0, le=1.0)
+    upper_bound: float = Field(ge=0.0, le=1.0)
+    includes_upper_bound: bool
+    count: int = Field(ge=0)
+    mean_score: float | None = Field(default=None, ge=0.0, le=1.0)
+    mean_target: float | None = Field(default=None, ge=0.0, le=1.0)
+    absolute_gap: float | None = Field(default=None, ge=0.0, le=1.0)
+
+
+class LabelCalibrationSummary(BaseModel):
+    """ECE-compatible calibration curve data for one label."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    label_name: str = Field(min_length=1)
+    n_available: int = Field(ge=0)
+    n_bins: int = Field(gt=0)
+    ece: float | None = Field(default=None, ge=0.0, le=1.0)
+    brier_score: float | None = Field(default=None, ge=0.0, le=1.0)
+    bins: list[CalibrationBin]
+
+
 def evaluate_binary_label(
     label_name: str,
     y_true: Sequence[float | int | None],
@@ -165,6 +193,78 @@ def evaluate_label_metrics(
     return results
 
 
+def summarize_label_calibration(
+    label_name: str,
+    y_true: Sequence[float | int | None],
+    y_score: Sequence[float | int | None],
+    *,
+    n_bins: int = 10,
+) -> LabelCalibrationSummary:
+    """Build deterministic equal-width calibration bins for one label.
+
+    Empty bins are retained with null means so exported curve data records the
+    complete binning scheme. A score of exactly 1.0 belongs to the final bin.
+    """
+
+    if len(y_true) != len(y_score):
+        raise ValueError("y_true and y_score must have the same length")
+    if n_bins <= 0:
+        raise ValueError("n_bins must be positive")
+
+    targets: list[float] = []
+    scores: list[float] = []
+    for target, score in zip(y_true, y_score, strict=True):
+        if _is_missing(target) or _is_missing(score):
+            continue
+        targets.append(_coerce_probability(target, field_name="target"))
+        scores.append(_coerce_probability(score, field_name="score"))
+
+    counts = [0] * n_bins
+    target_sums = [0.0] * n_bins
+    score_sums = [0.0] * n_bins
+    for target, score in zip(targets, scores, strict=True):
+        bin_index = min(int(score * n_bins), n_bins - 1)
+        counts[bin_index] += 1
+        target_sums[bin_index] += target
+        score_sums[bin_index] += score
+
+    bins: list[CalibrationBin] = []
+    for bin_index, count in enumerate(counts):
+        mean_target = target_sums[bin_index] / count if count else None
+        mean_score = score_sums[bin_index] / count if count else None
+        bins.append(
+            CalibrationBin(
+                bin_index=bin_index,
+                lower_bound=bin_index / n_bins,
+                upper_bound=(bin_index + 1) / n_bins,
+                includes_upper_bound=bin_index == n_bins - 1,
+                count=count,
+                mean_score=mean_score,
+                mean_target=mean_target,
+                absolute_gap=(
+                    abs(mean_score - mean_target)
+                    if mean_score is not None and mean_target is not None
+                    else None
+                ),
+            )
+        )
+
+    total = len(targets)
+    ece = (
+        sum((item.count / total) * (item.absolute_gap or 0.0) for item in bins)
+        if total
+        else None
+    )
+    return LabelCalibrationSummary(
+        label_name=label_name,
+        n_available=total,
+        n_bins=n_bins,
+        ece=float(ece) if ece is not None else None,
+        brier_score=_brier_score(targets, scores),
+        bins=bins,
+    )
+
+
 def _safe_auroc(targets: Sequence[float], scores: Sequence[float]) -> float | None:
     if not _has_both_classes(targets):
         return None
@@ -194,31 +294,12 @@ def _expected_calibration_error(
     *,
     n_bins: int,
 ) -> float | None:
-    if not targets:
-        return None
-
-    counts = [0] * n_bins
-    target_sums = [0.0] * n_bins
-    score_sums = [0.0] * n_bins
-
-    for target, score in zip(targets, scores, strict=True):
-        bin_index = min(int(score * n_bins), n_bins - 1)
-        counts[bin_index] += 1
-        target_sums[bin_index] += target
-        score_sums[bin_index] += score
-
-    total = len(targets)
-    ece = 0.0
-
-    for bin_index, count in enumerate(counts):
-        if count == 0:
-            continue
-
-        avg_target = target_sums[bin_index] / count
-        avg_score = score_sums[bin_index] / count
-        ece += (count / total) * abs(avg_score - avg_target)
-
-    return float(ece)
+    return summarize_label_calibration(
+        "label",
+        targets,
+        scores,
+        n_bins=n_bins,
+    ).ece
 
 
 def _threshold_metrics(

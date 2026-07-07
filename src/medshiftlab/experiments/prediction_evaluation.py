@@ -10,7 +10,7 @@ from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
 
 from medshiftlab.evaluation.report import EvaluationReport
 from medshiftlab.evaluation.table import create_evaluation_report_from_rows
-from medshiftlab.models.prediction import PredictionBatch, PredictionRecord
+from medshiftlab.models.prediction import PredictionBatch
 from medshiftlab.reporting.evaluation_export import (
     write_evaluation_label_metrics_csv,
     write_evaluation_report_json,
@@ -242,9 +242,10 @@ def run_prediction_batch_evaluation(
         )
 
     selected_prediction_ids = {record.sample_id for record in selected_predictions}
+    all_prediction_ids = {record.sample_id for record in predictions.records}
     label_ids = set(label_rows_by_id)
     missing_labels = len(selected_prediction_ids - label_ids)
-    missing_predictions = len(label_ids - selected_prediction_ids)
+    missing_predictions = len(label_ids - all_prediction_ids)
     if missing_labels or missing_predictions:
         raise ValueError(
             "Prediction/label sample_id mismatch: "
@@ -302,7 +303,7 @@ def run_prediction_batch_evaluation(
         total_prediction_records_loaded=total_prediction_records_loaded,
         total_label_rows_loaded=len(label_rows),
         selected_prediction_records=len(selected_predictions),
-        selected_label_rows=len(label_rows),
+        selected_label_rows=len(selected_prediction_ids),
         evaluated_records=len(evaluation_rows),
         skipped_records=skipped_records,
         missing_predictions=0,
