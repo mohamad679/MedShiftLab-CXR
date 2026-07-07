@@ -43,6 +43,9 @@ predictions_with_absolute_paths*.csv
 *.safetensors
 weights/
 checkpoints/
+/.cache/huggingface/
+/.cache/torch/
+/model_cache/
 
 # Temporary outputs
 tmp/

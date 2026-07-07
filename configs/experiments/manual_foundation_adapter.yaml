@@ -1,0 +1,20 @@
+project: MedShiftLab-CXR
+experiment: manual_foundation_adapter_scaffold
+status: mock_scaffold_only
+adapter_key: foundation_model_scaffold
+prediction_schema_version: medshiftlab.prediction.v1
+checkpoint_source_identifier: explicit_local_manual_identifier_required
+real_backend:
+  enabled: false
+  weight_download_allowed: false
+  automatic_dependency_install_allowed: false
+safe_defaults:
+  subset_limit: 16
+  allow_large_run: false
+preprocessing:
+  provenance_required: true
+  image_loader: phase3-package-loader
+notes:
+  - Phase 9 provides no real foundation-model backend integration.
+  - Tests must inject a fake backend and require no image data.
+  - This profile does not imply benchmark or validation completion.

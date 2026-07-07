@@ -21,8 +21,10 @@ MedShiftLab-CXR currently has no hosted live demo and no frontend/API surface. T
 - Evaluation metrics and `EvaluationReport` schema
 - Evaluation table interface
 - Standardized prediction schema and adapter protocol
+- Path-free model-adapter candidate registry and safe adapter factory
 - Optional TorchXRayVision adapter boundary
 - Manual-only baseline TorchXRayVision inference path for small local subsets
+- Mock-compatible generic foundation-model adapter scaffold with no real backend integration
 - Standardized prediction-evaluation orchestration for local prediction files
 - CheXpert internal protocol scaffolding with patient-disjoint split manifests and uncertainty-strategy label-table materialization
 - External-validation setup scaffolding for MIMIC-CXR-JPG and VinDr-CXR with label harmonization and manifest validation
@@ -55,6 +57,8 @@ Standardized prediction evaluation is also available for local prediction JSON/C
 CheXpert internal protocol scaffolding is also available through local/manual preparation utilities. This currently covers patient-level split assignment, reproducible protocol configs, and Phase 6-compatible label-table generation under explicit uncertainty strategies. It does not by itself run real inference, produce completed internal benchmark results, or establish external or clinical validation.
 
 External-validation setup scaffolding is also available through local/manual preparation utilities for MIMIC-CXR-JPG and VinDr-CXR. This currently covers dataset-specific label harmonization configs, external manifest validation, optional patient-overlap checks against internal manifests, and Phase 6-compatible external label-table generation. It does not by itself run real external validation, produce completed benchmark results, or establish clinical validation.
+
+The Phase 9 adapter registry records safe construction policy, dependency metadata, preprocessing requirements, checkpoint/source placeholders, and license/access notes. The generic foundation-model adapter is mock-only: real initialization is denied by default, no weights are downloaded, and explicit real-backend authorization still stops with a clear unsupported/dependency error until a reviewed integration exists.
 
 ## Results and figures
 
@@ -97,13 +101,15 @@ Raw and restricted medical datasets must remain outside Git.
 - No benchmark-grade or full-dataset integrated inference workflow
 - No completed full-dataset prediction-evaluation workflow
 - No model training
+- No model fine-tuning or LoRA/PEFT integration
+- No real foundation-model backend beyond the manual-only TorchXRayVision baseline path
 - No state-of-the-art (SOTA) or regulatory claim
 - No hosted live demo
 - No frontend/API in the active project
 
 ## What is not claimed
 
-This repository includes no clinical validation, diagnostic deployment, completed benchmark, external validation, model training, hosted live demo, or frontend/API. It makes no SOTA or regulatory claim. The tracked prior subset inference artifacts do not establish clinical performance, generalization, or package-level inference integration.
+This repository includes no clinical validation, diagnostic deployment, completed benchmark, completed external validation, model training or fine-tuning, hosted live demo, or frontend/API. It makes no SOTA or regulatory claim. The tracked prior subset inference artifacts do not establish clinical performance or generalization.
 
 ## Suggested next steps
 

@@ -1,0 +1,19 @@
+project: MedShiftLab-CXR
+registry_version: phase9-v1
+weight_download_policy: forbidden_by_default
+adapters:
+  - adapter_key: mock_constant
+    display_name: Deterministic constant-score test adapter
+    implementation_status: mock_only
+    checkpoint_source_identifier: mock-constant-v1
+  - adapter_key: torchxrayvision
+    display_name: TorchXRayVision baseline
+    implementation_status: manual_optional
+    checkpoint_source_identifier: caller_supplied_authorized_identifier
+  - adapter_key: foundation_model_scaffold
+    display_name: Generic CXR foundation-model scaffold
+    implementation_status: mock_only
+    checkpoint_source_identifier: explicit_local_manual_identifier_required
+notes:
+  - Registry metadata does not initialize dependencies or resolve weights.
+  - License and access review is required before any real optional integration.
