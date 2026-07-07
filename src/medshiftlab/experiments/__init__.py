@@ -21,6 +21,10 @@ from medshiftlab.experiments.runner import (
     InMemoryExperimentResult,
     run_in_memory_evaluation_experiment,
 )
+from medshiftlab.experiments.robustness_analysis import (
+    RobustnessAnalysisConfig,
+    run_robustness_analysis_from_files,
+)
 
 __all__ = [
     "ExportedExperimentResult",
@@ -32,10 +36,12 @@ __all__ = [
     "PredictionEvaluationAccounting",
     "PredictionEvaluationConfig",
     "PredictionEvaluationResult",
+    "RobustnessAnalysisConfig",
     "load_ground_truth_label_rows",
     "load_prediction_batch",
     "run_and_export_evaluation_experiment",
     "run_prediction_batch_evaluation",
     "run_prediction_batch_evaluation_from_files",
+    "run_robustness_analysis_from_files",
     "run_in_memory_evaluation_experiment",
 ]

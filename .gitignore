@@ -52,8 +52,12 @@ tmp/
 scratch/
 /outputs/local_predictions/
 /outputs/local_evaluations/
+/outputs/local_robustness/
 /results/local_private_runs/
 /figures/local_private_runs/
+/results/local_robustness_reports/
+/figures/local_calibration/
+/outputs/local_subgroup_reports/
 
 # Local code indexing tools
 .codebase-memory/
