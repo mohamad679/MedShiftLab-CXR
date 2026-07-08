@@ -292,3 +292,13 @@ The run produced local/private labels, manifest, and summary outputs for 15,000 
 This stage is input preparation only. It is not training, not inference, and not external-validation metrics.
 
 See `docs/reports/vindr_real_input_workflow_v043.md`.
+
+## VinDr/VinBigData inference-readiness handoff v0.4.4
+
+v0.4.4 records the inference-readiness handoff for VinDr/VinBigData external validation.
+
+The handoff closes the input-preparation phase and defines the minimum safe requirements before any VinDr/VinBigData image inference is attempted.
+
+This stage is not training, not inference, and not external-validation metrics.
+
+See `docs/reports/vindr_inference_readiness_handoff_v044.md`.
