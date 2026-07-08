@@ -302,3 +302,11 @@ The handoff closes the input-preparation phase and defines the minimum safe requ
 This stage is not training, not inference, and not external-validation metrics.
 
 See `docs/reports/vindr_inference_readiness_handoff_v044.md`.
+
+## VinDr/VinBigData inference runner scaffold v0.4.5
+
+v0.4.5 adds a VinDr/VinBigData inference-runner scaffold.
+
+The scaffold validates prepared manifest and label inputs and writes a local/private inference-readiness summary. It does not load a model, generate predictions, run inference, or compute metrics.
+
+See `docs/reports/vindr_inference_runner_scaffold_v045.md`.
