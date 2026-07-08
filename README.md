@@ -203,3 +203,19 @@ This supports the conclusion that calibrated thresholds avoid all-positive behav
 
 See: [`docs/reports/chexpert_bootstrap_uncertainty_r4.md`](docs/reports/chexpert_bootstrap_uncertainty_r4.md)
 
+## Subgroup audit status
+
+A local/private R5 subgroup audit was completed on the R3 evaluation split.
+
+Subgroup variables:
+
+- Sex
+- View position
+- Age bucket
+
+The audit shows that calibration-selected thresholds avoid the default 0.5 all-positive behavior across evaluated slices and substantially improve specificity. However, subgroup sizes are small in several slices, especially PA view position, and rare-label estimates remain unstable.
+
+This is exploratory only. It is not fairness validation, not clinical validation, not external validation, and not a full benchmark.
+
+See: [`docs/reports/chexpert_subgroup_audit_r5.md`](docs/reports/chexpert_subgroup_audit_r5.md)
+
