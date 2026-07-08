@@ -414,3 +414,13 @@ The run evaluated 202 frontal CheXpert validation images with TorchXRayVision De
 This stage does not train a model and does not establish clinical validation.
 
 See `docs/reports/chexpert_reference_eval_v070.md`.
+
+## CheXpert vs VinDr cross-dataset comparison v0.7.1
+
+v0.7.1 compares the CheXpert frontal validation reference evaluation against the VinDr/VinBigData external-validation evaluation.
+
+The comparison shows that Cardiomegaly and Pleural Effusion are the most stable labels, while Atelectasis and Pneumothorax remain difficult under prevalence shift, AUPRC/F1 behavior, and threshold sensitivity.
+
+This stage does not train a model and does not run new inference.
+
+See `docs/reports/chexpert_vindr_cross_dataset_comparison_v071.md`.
