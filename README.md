@@ -310,3 +310,11 @@ v0.4.5 adds a VinDr/VinBigData inference-runner scaffold.
 The scaffold validates prepared manifest and label inputs and writes a local/private inference-readiness summary. It does not load a model, generate predictions, run inference, or compute metrics.
 
 See `docs/reports/vindr_inference_runner_scaffold_v045.md`.
+
+## VinDr/VinBigData real inference scaffold run v0.4.6
+
+v0.4.6 records a real Kaggle execution of the VinDr/VinBigData inference-runner scaffold.
+
+The run consumed real prepared VinDr/VinBigData manifest and label inputs for 15,000 joinable samples. It did not load a model, generate predictions, run inference, or compute metrics.
+
+See `docs/reports/vindr_real_inference_scaffold_run_v046.md`.
