@@ -186,3 +186,20 @@ This shows that calibration-selected thresholds avoid the all-positive behavior 
 
 See: [`docs/reports/chexpert_calibrated_threshold_eval_r3.md`](docs/reports/chexpert_calibrated_threshold_eval_r3.md)
 
+## Bootstrap uncertainty status
+
+A local/private R4 bootstrap uncertainty summary was completed on the R3 evaluation split using 1000 bootstrap resamples.
+
+Key exploratory bootstrap results:
+
+- Calibration-selected mean F1: 0.3442, bootstrap 2.5%-97.5% range 0.2979-0.3802
+- Default 0.5 mean F1: 0.3288, bootstrap 2.5%-97.5% range 0.2932-0.3608
+- Calibration-selected mean specificity: 0.7874, bootstrap 2.5%-97.5% range 0.7303-0.8385
+- Default 0.5 mean specificity: 0.0000, bootstrap 2.5%-97.5% range 0.0000-0.0000
+- Calibration-selected mean balanced accuracy: 0.5899, bootstrap 2.5%-97.5% range 0.5570-0.6217
+- Default 0.5 mean balanced accuracy: 0.5000, bootstrap 2.5%-97.5% range 0.4000-0.5000
+
+This supports the conclusion that calibrated thresholds avoid all-positive behavior and improve specificity/balanced accuracy, while F1 differences remain uncertain. This is exploratory only and not clinical validation.
+
+See: [`docs/reports/chexpert_bootstrap_uncertainty_r4.md`](docs/reports/chexpert_bootstrap_uncertainty_r4.md)
+
