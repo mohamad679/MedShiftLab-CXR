@@ -219,3 +219,19 @@ This is exploratory only. It is not fairness validation, not clinical validation
 
 See: [`docs/reports/chexpert_subgroup_audit_r5.md`](docs/reports/chexpert_subgroup_audit_r5.md)
 
+## Real-data evaluation closeout
+
+The first CheXpert real-data evaluation sequence has been completed and documented across R1-R5:
+
+- R1: real-image CheXpert safe-subset inference/evaluation
+- R2: threshold sweep
+- R3: calibrated threshold evaluation split
+- R4: bootstrap uncertainty
+- R5: subgroup/slice audit
+
+The sequence verifies that MedShiftLab-CXR has a working real-image evaluation path with threshold calibration, uncertainty summaries, and subgroup audit tooling.
+
+These results remain exploratory only. They are not clinical validation, not external validation, not fairness validation, and not a full benchmark.
+
+Closeout summary: [`docs/reports/chexpert_realdata_evaluation_closeout_r6.md`](docs/reports/chexpert_realdata_evaluation_closeout_r6.md)
+
