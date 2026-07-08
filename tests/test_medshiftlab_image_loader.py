@@ -113,10 +113,15 @@ def test_normalization_modes(tmp_path: Path) -> None:
             standardize_std=0.5,
         ),
     ).array
+    torchxrayvision = load_image(
+        path,
+        ImagePreprocessingConfig(normalization="torchxrayvision"),
+    ).array
 
     np.testing.assert_allclose(zero_one, [[0.0, 1.0]])
     np.testing.assert_allclose(minus_one_one, [[-1.0, 1.0]])
     np.testing.assert_allclose(standardized, [[-1.0, 1.0]])
+    np.testing.assert_allclose(torchxrayvision, [[-1024.0, 1024.0]])
 
 
 def test_missing_image_fails_clearly(tmp_path: Path) -> None:

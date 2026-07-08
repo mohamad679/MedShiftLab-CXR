@@ -97,8 +97,13 @@ def test_predict_scores_from_outputs_maps_to_prediction_batch() -> None:
     assert batch.model_name == "torchxrayvision-densenet121"
     assert batch.model_version == "torchxrayvision-densenet121:external-init"
     assert batch.adapter_name == "torchxrayvision-adapter"
-    assert batch.preprocessing_version == "phase5-baseline-inference-v1"
+    assert batch.preprocessing_version == "phase5-baseline-inference-v2"
     assert batch.preprocessing_config["image_loader"] == "phase3-package-loader"
+    assert (
+        batch.preprocessing_config["image_preprocessing"]["normalization"]
+        == "torchxrayvision"
+    )
+    assert batch.preprocessing_config["image_preprocessing"]["target_size"] == [224, 224]
     assert batch.labels == ("Atelectasis", "Cardiomegaly")
     assert [record.scores for record in batch.records] == [
         {"Atelectasis": 0.2, "Cardiomegaly": 0.8},

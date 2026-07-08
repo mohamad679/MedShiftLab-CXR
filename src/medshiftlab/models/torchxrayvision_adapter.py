@@ -57,7 +57,7 @@ class TorchXRayVisionAdapterConfig(BaseModel):
     device: str = Field(default="cpu", min_length=1)
     adapter_name: str = Field(default="torchxrayvision-adapter", min_length=1)
     preprocessing_version: str = Field(
-        default="phase5-baseline-inference-v1",
+        default="phase5-baseline-inference-v2",
         min_length=1,
     )
     preprocessing_config: dict[str, object] = Field(default_factory=dict)
@@ -65,7 +65,7 @@ class TorchXRayVisionAdapterConfig(BaseModel):
         default_factory=lambda: ImagePreprocessingConfig(
             output_mode="grayscale",
             target_size=(224, 224),
-            normalization="minus_one_one",
+            normalization="torchxrayvision",
         )
     )
     batch_size: int = Field(default=4, gt=0)

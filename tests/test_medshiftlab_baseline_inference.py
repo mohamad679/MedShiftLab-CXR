@@ -289,9 +289,9 @@ def test_adapter_predict_records_returns_standardized_batch(
     assert batch.model_name == "torchxrayvision-densenet121"
     assert batch.model_version == "torchxrayvision:test-weights"
     assert batch.adapter_name == "torchxrayvision-adapter"
-    assert batch.preprocessing_version == "phase5-baseline-inference-v1"
+    assert batch.preprocessing_version == "phase5-baseline-inference-v2"
     assert batch.preprocessing_config["image_loader"] == "phase3-package-loader"
-    assert batch.preprocessing_config["image_preprocessing"]["normalization"] == "minus_one_one"
+    assert batch.preprocessing_config["image_preprocessing"]["normalization"] == "torchxrayvision"
     assert batch.run_metadata["n_records"] == 2
     assert batch.records[0].sample_id == "img001"
     assert batch.records[0].patient_id == "pat1"

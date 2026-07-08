@@ -48,7 +48,7 @@ class ImagePreprocessingConfig(BaseModel):
     output_mode: Literal["grayscale", "rgb"] = "grayscale"
     target_size: tuple[int, int] | None = None
     normalization: Literal[
-        "none", "zero_one", "minus_one_one", "standardize"
+        "none", "zero_one", "minus_one_one", "torchxrayvision", "standardize"
     ] = "zero_one"
     standardize_mean: float = 0.0
     standardize_std: float = Field(default=1.0, gt=0.0)
@@ -298,6 +298,8 @@ def _normalize_image(
         normalized = array / 255.0
     elif settings.normalization == "minus_one_one":
         normalized = (array / 127.5) - 1.0
+    elif settings.normalization == "torchxrayvision":
+        normalized = ((array / 255.0) * 2.0 - 1.0) * 1024.0
     else:
         normalized = (
             (array / 255.0) - settings.standardize_mean
