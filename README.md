@@ -374,3 +374,13 @@ The completed chain includes real metadata matching, full real inference on 15,0
 This is external dataset evaluation, not clinical validation or deployment readiness.
 
 See `docs/reports/vindr_external_validation_closeout_v053.md`.
+
+## VinDr/VinBigData threshold analysis v0.6.0
+
+v0.6.0 records threshold tuning and operating-point analysis for the VinDr/VinBigData external-validation predictions.
+
+The analysis reused the full v0.5.1 prediction file and prepared labels for 15,000 samples. Best F1 thresholds were 0.55 for Atelectasis, 0.35 for Cardiomegaly, 0.50 for Pleural Effusion, and 0.50 for Pneumothorax.
+
+This stage does not train a model and does not run new inference.
+
+See `docs/reports/vindr_threshold_analysis_v060.md`.
