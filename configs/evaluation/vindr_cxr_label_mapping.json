@@ -1,0 +1,50 @@
+{
+  "schema_version": "medshiftlab.label_mapping.v1",
+  "dataset_name": "vindr_cxr",
+  "purpose": "external_validation_scaffold",
+  "target_label_space": "torchxrayvision_chexpert_overlap_v1",
+  "target_labels": [
+    "Atelectasis",
+    "Cardiomegaly",
+    "Pleural Effusion",
+    "Pneumonia",
+    "Pneumothorax"
+  ],
+  "source_to_target": {
+    "Atelectasis": "Atelectasis",
+    "Cardiomegaly": "Cardiomegaly",
+    "Pleural effusion": "Pleural Effusion",
+    "Pleural Effusion": "Pleural Effusion",
+    "Pneumonia": "Pneumonia",
+    "Pneumothorax": "Pneumothorax"
+  },
+  "excluded_or_unmapped_source_labels": [
+    "Aortic enlargement",
+    "Calcification",
+    "Clavicle fracture",
+    "Consolidation",
+    "Edema",
+    "Emphysema",
+    "Enlarged PA",
+    "ILD",
+    "Infiltration",
+    "Lung cavity",
+    "Lung cyst",
+    "Lung Opacity",
+    "Lung tumor",
+    "Mediastinal shift",
+    "Nodule/Mass",
+    "Other lesion",
+    "Pleural thickening",
+    "Pulmonary fibrosis",
+    "Rib fracture",
+    "No finding"
+  ],
+  "claim_level": {
+    "external_validation_completed": false,
+    "clinical_validation_completed": false,
+    "full_benchmark_completed": false,
+    "fairness_validation_completed": false
+  },
+  "notes": "Scaffold mapping only. Label harmonization must be reviewed before any validated external-performance claim."
+}

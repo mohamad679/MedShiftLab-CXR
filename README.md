@@ -250,3 +250,17 @@ The runner supports dry-run command generation by default and full execution wit
 
 Workflow report: [`docs/reports/chexpert_evaluation_workflow_r7.md`](docs/reports/chexpert_evaluation_workflow_r7.md)
 
+## VinDr-CXR external validation scaffold
+
+A VinDr-CXR external-validation scaffold has been added for the v0.4.0 track.
+
+Added components:
+
+- `configs/evaluation/vindr_cxr_label_mapping.json`
+- `scripts/prepare_vindr_external_validation_inputs.py`
+- `tests/test_medshiftlab_vindr_external_validation_scaffold.py`
+
+This is a scaffold only. It prepares image-level labels, optional metadata, optional manifests, and local/private preparation summaries. It does not run VinDr-CXR inference and does not claim external validation, clinical validation, fairness validation, or full benchmarking.
+
+Report: [`docs/reports/vindr_external_validation_scaffold_v040.md`](docs/reports/vindr_external_validation_scaffold_v040.md)
+
