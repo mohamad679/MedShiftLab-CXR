@@ -424,3 +424,13 @@ The comparison shows that Cardiomegaly and Pleural Effusion are the most stable 
 This stage does not train a model and does not run new inference.
 
 See `docs/reports/chexpert_vindr_cross_dataset_comparison_v071.md`.
+
+## CheXpert/VinDr reference comparison closeout v0.7.2
+
+v0.7.2 closes the CheXpert/VinDr reference-comparison phase.
+
+The project now has a real CheXpert reference evaluation, full VinDr/VinBigData external inference, VinDr/VinBigData external metrics, threshold analysis, calibration analysis, and a cross-dataset comparison. This supports a credible cross-dataset shift narrative without claiming clinical validation.
+
+This stage does not train a model and does not run new inference.
+
+See `docs/reports/chexpert_vindr_reference_comparison_closeout_v072.md`.
