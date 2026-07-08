@@ -235,3 +235,18 @@ These results remain exploratory only. They are not clinical validation, not ext
 
 Closeout summary: [`docs/reports/chexpert_realdata_evaluation_closeout_r6.md`](docs/reports/chexpert_realdata_evaluation_closeout_r6.md)
 
+## Reproducible evaluation workflow status
+
+A local evaluation workflow runner has been added to orchestrate the R2-R5 evaluation sequence:
+
+- threshold sweep
+- calibrated threshold evaluation
+- bootstrap uncertainty
+- subgroup audit
+
+Script: `scripts/run_evaluation_workflow.py`
+
+The runner supports dry-run command generation by default and full execution with `--execute`. It is intended for local/private exploratory evaluation outputs and should not be used to claim clinical validation, fairness validation, external validation, or full benchmarking.
+
+Workflow report: [`docs/reports/chexpert_evaluation_workflow_r7.md`](docs/reports/chexpert_evaluation_workflow_r7.md)
+
