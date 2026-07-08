@@ -434,3 +434,13 @@ The project now has a real CheXpert reference evaluation, full VinDr/VinBigData 
 This stage does not train a model and does not run new inference.
 
 See `docs/reports/chexpert_vindr_reference_comparison_closeout_v072.md`.
+
+## Final release v1.0.0
+
+MedShiftLab-CXR v1.0.0 closes the current project scope.
+
+The project now includes real CheXpert reference evaluation, full VinDr/VinBigData external inference, VinDr/VinBigData external metrics, threshold analysis, calibration analysis, and cross-dataset comparison.
+
+This release supports a dataset-shift evaluation narrative. It does not claim clinical validation, diagnostic deployment readiness, prospective validation, fairness validation, SOTA performance, or regulatory readiness.
+
+See `docs/reports/final_release_closeout_v100.md`.
