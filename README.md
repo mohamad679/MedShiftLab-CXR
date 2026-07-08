@@ -404,3 +404,13 @@ Recommended reporting thresholds are 0.55 for Atelectasis, 0.35 for Cardiomegaly
 This stage does not train a model and does not run new inference.
 
 See `docs/reports/vindr_operating_point_recommendation_v062.md`.
+
+## CheXpert reference evaluation v0.7.0
+
+v0.7.0 records a real CheXpert frontal validation reference evaluation.
+
+The run evaluated 202 frontal CheXpert validation images with TorchXRayVision DenseNet121. At threshold 0.5, the model showed high sensitivity but low specificity, indicating substantial overprediction at the default operating point.
+
+This stage does not train a model and does not establish clinical validation.
+
+See `docs/reports/chexpert_reference_eval_v070.md`.
