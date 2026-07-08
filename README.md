@@ -130,3 +130,22 @@ docs/medshiftlab/templates/          Reusable documentation templates
 2. Tag a closeout snapshot after tests pass and docs are approved.
 3. If real experiments are later authorized, create versioned local-only run directories and experiment cards for each run.
 4. Treat any future full inference, internal evaluation, or external validation as a new explicitly approved phase.
+
+## Real-data safe-subset status
+
+A local/private Kaggle R1 run was completed on a 64-image frontal CheXpert validation subset using the TorchXRayVision DenseNet121 baseline adapter.
+
+The run verified the real-image inference path after updating preprocessing to `phase5-baseline-inference-v2` with TorchXRayVision-compatible normalization.
+
+Summary result at threshold 0.5:
+
+- Mean AUROC: 0.7999
+- Mean AUPRC: 0.4339
+- Mean F1: 0.2385
+- Mean sensitivity: 1.0
+- Mean specificity: 0.0
+
+This is an exploratory safe-subset smoke baseline only. It is not a full benchmark, not external validation, and not clinical validation.
+
+See: [`docs/reports/chexpert_safe_subset_r1.md`](docs/reports/chexpert_safe_subset_r1.md)
+
