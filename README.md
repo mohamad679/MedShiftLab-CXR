@@ -282,3 +282,13 @@ The `scripts/prepare_vindr_external_validation_inputs.py` scaffold now fails fas
 This stage is input preparation only. It is not training, not inference, and not external-validation metrics.
 
 See `docs/reports/vindr_external_validation_input_workflow_v042.md`.
+
+## VinDr/VinBigData real input workflow run v0.4.3
+
+v0.4.3 records a real Kaggle execution of the hardened VinDr/VinBigData input-preparation workflow.
+
+The run produced local/private labels, manifest, and summary outputs for 15,000 matched images with zero missing images. These runtime outputs are not committed.
+
+This stage is input preparation only. It is not training, not inference, and not external-validation metrics.
+
+See `docs/reports/vindr_real_input_workflow_v043.md`.
