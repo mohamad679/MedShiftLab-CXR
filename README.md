@@ -384,3 +384,13 @@ The analysis reused the full v0.5.1 prediction file and prepared labels for 15,0
 This stage does not train a model and does not run new inference.
 
 See `docs/reports/vindr_threshold_analysis_v060.md`.
+
+## VinDr/VinBigData calibration analysis v0.6.1
+
+v0.6.1 records calibration-oriented analysis for the VinDr/VinBigData external-validation predictions.
+
+The analysis reused the full v0.5.1 prediction file and prepared labels for 15,000 samples. Cardiomegaly showed the best calibration, while Atelectasis and Pneumothorax showed substantial overprediction relative to observed prevalence.
+
+This stage does not train a model and does not run new inference.
+
+See `docs/reports/vindr_calibration_analysis_v061.md`.
