@@ -318,3 +318,11 @@ v0.4.6 records a real Kaggle execution of the VinDr/VinBigData inference-runner 
 The run consumed real prepared VinDr/VinBigData manifest and label inputs for 15,000 joinable samples. It did not load a model, generate predictions, run inference, or compute metrics.
 
 See `docs/reports/vindr_real_inference_scaffold_run_v046.md`.
+
+## VinDr/VinBigData prediction schema contract v0.4.7
+
+v0.4.7 adds a prediction schema validator for future VinDr/VinBigData inference outputs.
+
+The validator checks prediction CSV columns, probability ranges, duplicate sample IDs, and sample alignment against prepared manifest and label files. It does not generate predictions, run inference, or compute metrics.
+
+See `docs/reports/vindr_prediction_schema_contract_v047.md`.
