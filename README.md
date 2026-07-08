@@ -394,3 +394,13 @@ The analysis reused the full v0.5.1 prediction file and prepared labels for 15,0
 This stage does not train a model and does not run new inference.
 
 See `docs/reports/vindr_calibration_analysis_v061.md`.
+
+## VinDr/VinBigData operating-point recommendation v0.6.2
+
+v0.6.2 closes the VinDr/VinBigData threshold and calibration analysis phase.
+
+Recommended reporting thresholds are 0.55 for Atelectasis, 0.35 for Cardiomegaly, 0.50 for Pleural Effusion, and 0.50 for Pneumothorax. Cardiomegaly and Pleural Effusion are the strongest labels, while Atelectasis and Pneumothorax require cautious interpretation due to weak precision and calibration behavior.
+
+This stage does not train a model and does not run new inference.
+
+See `docs/reports/vindr_operating_point_recommendation_v062.md`.
