@@ -264,3 +264,11 @@ This is a scaffold only. It prepares image-level labels, optional metadata, opti
 
 Report: [`docs/reports/vindr_external_validation_scaffold_v040.md`](docs/reports/vindr_external_validation_scaffold_v040.md)
 
+
+## VinDr/VinBigData metadata dry-run v0.4.1
+
+v0.4.1 records a real VinDr/VinBigData metadata dry-run for external-validation preparation.
+
+This stage verifies annotation-to-image matching and conservative label preparation only. It is not model training, not inference, and not external-validation metrics.
+
+See `docs/reports/vindr_metadata_dryrun_v041.md`.
