@@ -167,3 +167,22 @@ This improved threshold behavior compared with the default threshold of 0.5, whi
 
 See: [`docs/reports/chexpert_threshold_sweep_r2.md`](docs/reports/chexpert_threshold_sweep_r2.md)
 
+## Calibrated threshold evaluation status
+
+A local/private R3 calibrated-threshold experiment was completed on 202 frontal CheXpert validation images.
+
+Thresholds were selected on a deterministic calibration split and evaluated on a separate evaluation split.
+
+Evaluation aggregate comparison:
+
+- Default 0.5 mean F1: 0.3288
+- Calibration-selected mean F1: 0.3442
+- Default 0.5 mean specificity: 0.0000
+- Calibration-selected mean specificity: 0.7874
+- Default 0.5 mean balanced accuracy: 0.5000
+- Calibration-selected mean balanced accuracy: 0.5899
+
+This shows that calibration-selected thresholds avoid the all-positive behavior of the default 0.5 threshold, but sensitivity drops substantially for rare labels. These are exploratory thresholds only, not validated clinical or production operating points.
+
+See: [`docs/reports/chexpert_calibrated_threshold_eval_r3.md`](docs/reports/chexpert_calibrated_threshold_eval_r3.md)
+
