@@ -272,3 +272,13 @@ v0.4.1 records a real VinDr/VinBigData metadata dry-run for external-validation 
 This stage verifies annotation-to-image matching and conservative label preparation only. It is not model training, not inference, and not external-validation metrics.
 
 See `docs/reports/vindr_metadata_dryrun_v041.md`.
+
+## VinDr/VinBigData reusable input workflow v0.4.2
+
+v0.4.2 hardens the reusable VinDr/VinBigData external-validation input-preparation workflow.
+
+The `scripts/prepare_vindr_external_validation_inputs.py` scaffold now fails fast when `--image-root` is invalid, when no manifest images are found, or when `--require-images` is enabled and any prepared image is missing. Manifest image paths remain relative to the provided image root.
+
+This stage is input preparation only. It is not training, not inference, and not external-validation metrics.
+
+See `docs/reports/vindr_external_validation_input_workflow_v042.md`.

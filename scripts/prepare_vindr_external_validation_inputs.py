@@ -173,6 +173,52 @@ def _prepare_manifest(
     return pd.DataFrame(rows)
 
 
+def _validate_manifest_requirements(
+    *,
+    manifest: pd.DataFrame | None,
+    image_root: Path | None,
+    require_images: bool,
+    min_images_found: int,
+) -> dict[str, Any] | None:
+    if image_root is None:
+        return None
+    if not image_root.exists():
+        raise ValueError(f"--image-root does not exist: {image_root}")
+    if not image_root.is_dir():
+        raise ValueError(f"--image-root must be a directory: {image_root}")
+    if min_images_found < 1:
+        raise ValueError("--min-images-found must be at least 1 when --image-root is provided")
+    if manifest is None or manifest.empty:
+        raise ValueError("Manifest must be non-empty when --image-root is provided")
+
+    n_images_found = int(manifest["image_found"].sum())
+    n_images_missing = int((~manifest["image_found"]).sum())
+
+    if n_images_found == 0:
+        raise ValueError(
+            f"No images were found under --image-root {image_root} for the prepared manifest"
+        )
+    if n_images_found < min_images_found:
+        raise ValueError(
+            f"Only {n_images_found} images were found under --image-root {image_root}; "
+            f"minimum required is {min_images_found}"
+        )
+    if require_images and n_images_missing > 0:
+        raise ValueError(
+            f"--require-images was set, but {n_images_missing} manifest images are missing "
+            f"under --image-root {image_root}"
+        )
+
+    return {
+        "n_manifest_rows": int(len(manifest)),
+        "n_images_found": n_images_found,
+        "n_images_missing": n_images_missing,
+        "image_root": str(image_root),
+        "require_images": bool(require_images),
+        "min_images_found": int(min_images_found),
+    }
+
+
 def prepare_vindr_inputs(
     *,
     annotations_csv_path: Path,
@@ -186,6 +232,8 @@ def prepare_vindr_inputs(
     image_extensions: list[str] | None = None,
     dataset_name: str = "vindr_cxr",
     sample_prefix: str = "vindr",
+    require_images: bool = False,
+    min_images_found: int = 1,
 ) -> dict[str, Any]:
     metadata_columns = metadata_columns or []
     image_extensions = image_extensions or [".jpg", ".jpeg", ".png", ".dicom", ".dcm"]
@@ -215,6 +263,13 @@ def prepare_vindr_inputs(
         image_extensions=image_extensions,
     )
 
+    manifest_summary = _validate_manifest_requirements(
+        manifest=manifest,
+        image_root=image_root,
+        require_images=require_images,
+        min_images_found=min_images_found,
+    )
+
     output_dir.mkdir(parents=True, exist_ok=True)
     labels_path = output_dir / "vindr_labels.csv"
     metadata_path = output_dir / "vindr_metadata.csv"
@@ -239,16 +294,9 @@ def prepare_vindr_inputs(
             "metadata_columns": list(metadata.columns),
         }
 
-    manifest_summary: dict[str, Any] | None = None
     if manifest is not None:
         manifest.to_csv(manifest_path, index=False)
         outputs["manifest_csv"] = str(manifest_path)
-        manifest_summary = {
-            "n_manifest_rows": int(len(manifest)),
-            "n_images_found": int(manifest["image_found"].sum()),
-            "n_images_missing": int((~manifest["image_found"]).sum()),
-            "image_root": str(image_root),
-        }
 
     payload = {
         "schema_version": "medshiftlab.vindr_external_validation_inputs.v1",
@@ -292,6 +340,8 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--metadata-csv", type=Path)
     parser.add_argument("--metadata-columns", nargs="*", default=[])
     parser.add_argument("--image-root", type=Path)
+    parser.add_argument("--require-images", action="store_true")
+    parser.add_argument("--min-images-found", default=1, type=int)
     parser.add_argument(
         "--image-extensions",
         nargs="*",
@@ -316,6 +366,8 @@ def main() -> int:
         image_extensions=list(args.image_extensions),
         dataset_name=args.dataset_name,
         sample_prefix=args.sample_prefix,
+        require_images=args.require_images,
+        min_images_found=args.min_images_found,
     )
     print(json.dumps(payload, indent=2))
     return 0
