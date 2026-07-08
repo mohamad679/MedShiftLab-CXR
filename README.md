@@ -354,3 +354,13 @@ A pretrained TorchXRayVision DenseNet model was run on all 15,000 prepared VinDr
 This stage confirms full real inference execution. It does not compute external-validation metrics.
 
 See `docs/reports/vindr_full_real_inference_v051.md`.
+
+## VinDr/VinBigData external metrics v0.5.2
+
+v0.5.2 records real external-validation metrics from the full VinDr/VinBigData inference run.
+
+The evaluation used 15,000 real prediction rows from TorchXRayVision DenseNet121 and prepared VinDr/VinBigData labels. Metrics were computed for Atelectasis, Cardiomegaly, Pleural Effusion, and Pneumothorax. Pneumonia was excluded because VinBigData has zero positive Pneumonia labels under the conservative mapping policy.
+
+This stage reports external dataset metrics only. It is not clinical validation and not a full benchmark.
+
+See `docs/reports/vindr_external_metrics_v052.md`.
