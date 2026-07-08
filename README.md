@@ -149,3 +149,21 @@ This is an exploratory safe-subset smoke baseline only. It is not a full benchma
 
 See: [`docs/reports/chexpert_safe_subset_r1.md`](docs/reports/chexpert_safe_subset_r1.md)
 
+## Threshold sweep status
+
+A local/private R2 threshold sweep was completed on the same 64-image frontal CheXpert validation safe subset used in R1.
+
+The sweep used thresholds from 0.00 to 1.00 in steps of 0.01 and selected per-label thresholds by maximizing F1 with deterministic tie-breakers.
+
+Best exploratory thresholds:
+
+- Atelectasis: 0.68
+- Cardiomegaly: 0.63
+- Pleural Effusion: 0.69
+- Pneumonia: 0.65
+- Pneumothorax: 0.64
+
+This improved threshold behavior compared with the default threshold of 0.5, which produced all-positive predictions on the R1 subset. These thresholds are exploratory only and are not validated clinical or production operating points.
+
+See: [`docs/reports/chexpert_threshold_sweep_r2.md`](docs/reports/chexpert_threshold_sweep_r2.md)
+
