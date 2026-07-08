@@ -364,3 +364,13 @@ The evaluation used 15,000 real prediction rows from TorchXRayVision DenseNet121
 This stage reports external dataset metrics only. It is not clinical validation and not a full benchmark.
 
 See `docs/reports/vindr_external_metrics_v052.md`.
+
+## VinDr/VinBigData external validation closeout v0.5.3
+
+v0.5.3 closes the VinDr/VinBigData external-validation chain.
+
+The completed chain includes real metadata matching, full real inference on 15,000 VinDr/VinBigData images, schema validation, and external metric computation for Atelectasis, Cardiomegaly, Pleural Effusion, and Pneumothorax.
+
+This is external dataset evaluation, not clinical validation or deployment readiness.
+
+See `docs/reports/vindr_external_validation_closeout_v053.md`.
