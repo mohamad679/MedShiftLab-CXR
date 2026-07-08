@@ -344,3 +344,13 @@ A pretrained TorchXRayVision DenseNet model was run on a 25-image real VinDr sub
 This stage confirms real inference execution. It does not compute external-validation metrics.
 
 See `docs/reports/vindr_real_inference_subset_v050.md`.
+
+## VinDr/VinBigData full real inference v0.5.1
+
+v0.5.1 records the first full real VinDr/VinBigData image inference run.
+
+A pretrained TorchXRayVision DenseNet model was run on all 15,000 prepared VinDr/VinBigData images. The mapped project-label prediction file contains 15,000 rows and passed prediction-schema validation with exact sample coverage.
+
+This stage confirms full real inference execution. It does not compute external-validation metrics.
+
+See `docs/reports/vindr_full_real_inference_v051.md`.
