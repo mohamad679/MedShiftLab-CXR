@@ -1,5 +1,7 @@
 # MedShiftLab-CXR Final Package Closeout
 
+> **Document status:** Historical package-scaffold closeout written before the `v1.0.0` real-data evaluation chain. See the [current final release closeout](../reports/final_release_closeout_v100.md).
+
 ## Final Status
 
 MedShiftLab-CXR is ready as a PhD-application research scaffold.

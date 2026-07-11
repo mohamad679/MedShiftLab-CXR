@@ -1,5 +1,7 @@
 # MedShiftLab-CXR Roadmap
 
+> **Document status:** Historical pre-v1.0 roadmap. Completed real-data work and current boundaries are recorded in the [final release closeout](../reports/final_release_closeout_v100.md).
+
 ## Project Direction
 
 MedShiftLab-CXR is designed as a focused research track inside the NeuroSight repository.
