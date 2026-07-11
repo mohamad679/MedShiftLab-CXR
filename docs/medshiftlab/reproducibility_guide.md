@@ -235,6 +235,12 @@ aggregate uncertainty summaries. They are not clinical confidence intervals,
 and they do not establish clinical validation, prospective validation, or
 deployment validation.
 
+#### Real-run prerequisite gate
+
+A real cross-dataset bootstrap run requires sample-level standardized
+predictions and aligned labels for both datasets. Aggregate metrics cannot be
+used as bootstrap inputs or reconstructed into bootstrap confidence intervals.
+
 ## Safety warnings
 
 Do not commit:

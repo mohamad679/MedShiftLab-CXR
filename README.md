@@ -12,6 +12,13 @@ The project supports controlled research around one question:
 
 The authoritative current status is [`v1.0.0`](docs/reports/final_release_closeout_v100.md). Earlier phase, scaffold, and planning documents are retained as historical records and describe the repository at the time they were written.
 
+## Cross-dataset bootstrap status
+
+Cross-dataset bootstrap tooling is implemented, but real execution is blocked by
+missing CheXpert sample-level artifacts. Existing historical aggregate metrics
+remain unchanged, and no real cross-dataset bootstrap result is currently
+claimed. See the [handoff report](docs/reports/chexpert_vindr_cross_dataset_bootstrap_handoff.md).
+
 ## Current implemented scope
 
 - Conservative chest X-ray ontology and explicit `U-ignore`, `U-zero`, `U-one`, and `U-soft` label materialization
