@@ -63,6 +63,57 @@ def write_calibration_bins_csv(
     return path
 
 
+def write_calibration_curves_png(
+    report: RobustnessAnalysisReport,
+    output_path: str | Path,
+) -> Path:
+    """Write aggregate reliability curves from existing calibration bins."""
+
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    fig, ax = plt.subplots()
+    try:
+        ax.plot([0.0, 1.0], [0.0, 1.0], linestyle="--")
+
+        plotted_any_label = False
+        for label_name, summary in report.calibration.items():
+            mean_scores: list[float] = []
+            mean_targets: list[float] = []
+            for bin_data in summary.bins:
+                if bin_data.count <= 0:
+                    continue
+                if bin_data.mean_score is None or bin_data.mean_target is None:
+                    continue
+                mean_scores.append(bin_data.mean_score)
+                mean_targets.append(bin_data.mean_target)
+
+            if not mean_scores:
+                continue
+
+            ax.plot(mean_scores, mean_targets, label=label_name)
+            plotted_any_label = True
+
+        ax.set_xlim(0.0, 1.0)
+        ax.set_ylim(0.0, 1.0)
+        ax.set_xlabel("Mean predicted probability")
+        ax.set_ylabel("Observed positive fraction")
+        ax.set_title("Calibration curves")
+        if plotted_any_label:
+            ax.legend()
+
+        fig.savefig(path, dpi=150, bbox_inches="tight")
+    finally:
+        plt.close(fig)
+
+    return path
+
+
 def write_subgroup_metrics_csv(
     report: RobustnessAnalysisReport, output_path: str | Path
 ) -> Path:
@@ -114,6 +165,7 @@ def write_robustness_report_bundle(
     output_dir: str | Path,
     *,
     export_calibration_csv: bool = False,
+    export_calibration_plot: bool = False,
 ) -> dict[str, Path]:
     directory = Path(output_dir)
     outputs = {
@@ -130,5 +182,9 @@ def write_robustness_report_bundle(
     if export_calibration_csv:
         outputs["calibration_csv"] = write_calibration_bins_csv(
             report, directory / "calibration_bins.csv"
+        )
+    if export_calibration_plot:
+        outputs["calibration_plot"] = write_calibration_curves_png(
+            report, directory / "calibration_curves.png"
         )
     return outputs

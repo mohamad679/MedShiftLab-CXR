@@ -30,12 +30,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--output-dir",
-        help="Optional local directory for aggregate JSON/CSV reports.",
+        help="Optional local directory for aggregate JSON/CSV/PNG reports.",
     )
     parser.add_argument(
         "--export-calibration-csv",
         action="store_true",
         help="Export ECE-compatible calibration-bin table data under --output-dir.",
+    )
+    parser.add_argument(
+        "--export-calibration-plot",
+        action="store_true",
+        help="Export aggregate calibration reliability curves under --output-dir.",
     )
     parser.add_argument("--bootstrap-iters", type=int, default=0)
     parser.add_argument(
@@ -74,6 +79,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         item.strip() for item in args.bootstrap_metrics.split(",") if item.strip()
     )
     try:
+        if args.export_calibration_csv and not args.output_dir:
+            raise ValueError("--export-calibration-csv requires --output-dir")
+        if args.export_calibration_plot and not args.output_dir:
+            raise ValueError("--export-calibration-plot requires --output-dir")
+
         report = run_robustness_analysis_from_files(
             predictions_path=args.predictions,
             labels_csv_path=args.labels_csv,
@@ -103,12 +113,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 report,
                 args.output_dir,
                 export_calibration_csv=args.export_calibration_csv,
+                export_calibration_plot=args.export_calibration_plot,
             )
             if args.output_dir
             else {}
         )
-        if args.export_calibration_csv and not args.output_dir:
-            raise ValueError("--export-calibration-csv requires --output-dir")
     except (FileNotFoundError, ValueError) as error:
         print(f"Robustness analysis error: {error}", file=sys.stderr)
         return 2

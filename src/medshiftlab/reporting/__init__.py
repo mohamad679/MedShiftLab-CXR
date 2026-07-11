@@ -14,6 +14,7 @@ from medshiftlab.reporting.prediction_export import (
 from medshiftlab.reporting.robustness_export import (
     write_bootstrap_intervals_csv,
     write_calibration_bins_csv,
+    write_calibration_curves_png,
     write_robustness_report_bundle,
     write_robustness_report_json,
     write_subgroup_metrics_csv,
@@ -29,6 +30,7 @@ __all__ = [
     "write_prediction_records_csv",
     "write_bootstrap_intervals_csv",
     "write_calibration_bins_csv",
+    "write_calibration_curves_png",
     "write_robustness_report_bundle",
     "write_robustness_report_json",
     "write_subgroup_metrics_csv",

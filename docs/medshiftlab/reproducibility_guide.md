@@ -189,6 +189,22 @@ PYTHONPATH=src python scripts/run_robustness_calibration_analysis.py \
   --limit 256
 ```
 
+Optional aggregate reliability-curve PNG export:
+
+```bash
+PYTHONPATH=src python scripts/run_robustness_calibration_analysis.py \
+  --predictions <PRIVATE_PREDICTIONS_JSON_OR_CSV> \
+  --labels-csv <PRIVATE_LABEL_TABLE_CSV> \
+  --output-dir outputs/local_robustness/<RUN_ID> \
+  --export-calibration-plot
+```
+
+The `--export-calibration-plot` flag writes `calibration_curves.png` from the
+existing aggregate calibration bins in the robustness report. It does not run
+new inference, fit a calibrator, change binning, or alter metric calculations.
+This output is local/manual aggregate analysis only. It is not clinical
+calibration evidence and is not deployment validation.
+
 If a future confirmatory local run explicitly needs bootstrap intervals, set `--bootstrap-iters` to the prespecified value for that run and record it in the experiment card.
 
 ## Safety warnings
