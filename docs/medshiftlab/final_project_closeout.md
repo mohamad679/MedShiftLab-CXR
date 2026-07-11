@@ -1,5 +1,7 @@
 # MedShiftLab-CXR Final Project Closeout
 
+> **Document status:** Historical Phase 11 scaffold closeout written before the later real-data VinDr and CheXpert evaluation track. See the [current final release closeout](../reports/final_release_closeout_v100.md).
+
 ## Status
 
 Phase 11 closes the repository as a conservative research scaffold and documentation package. The implemented code supports local/manual data preparation, bounded baseline inference, standardized prediction evaluation, and downstream robustness-style analysis scaffolding. It does not include completed benchmark results, completed external validation, or clinical validation.

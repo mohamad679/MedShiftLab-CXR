@@ -1,5 +1,7 @@
 # MedShiftLab-CXR
 
+> **Document status:** Historical scaffold-era inventory. Later real-data inference and evaluation work is documented in the [current final release closeout](../reports/final_release_closeout_v100.md).
+
 Data-centric evaluation framework for pretrained chest X-ray foundation models under annotation uncertainty and cross-dataset distribution shift.
 
 ## Implemented Components

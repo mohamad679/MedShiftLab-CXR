@@ -1,5 +1,7 @@
 # Real-data run plan
 
+> **Document status:** Historical pre-run plan. CheXpert reference evaluation and VinDr/VinBigData external-dataset evaluation were subsequently completed; see the [current final release closeout](../reports/final_release_closeout_v100.md).
+
 MedShiftLab-CXR does not commit real restricted datasets into this repository. Raw CheXpert, VinDr-CXR, MIMIC-CXR, and similar medical image assets must stay outside Git.
 
 CheXpert is the development and internal-protocol dataset. MIMIC-CXR-JPG and VinDr-CXR are external validation candidates; candidate selection depends on authorized access and frozen label compatibility.

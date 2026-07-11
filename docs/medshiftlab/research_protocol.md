@@ -1,5 +1,7 @@
 # MedShiftLab-CXR Research Protocol
 
+> **Document status:** Historical Phase 1 protocol freeze. It remains useful for the original study design and claim rules, but it does not describe the current `v1.0.0` implementation status. See the [current final release closeout](../reports/final_release_closeout_v100.md).
+
 ## Protocol status
 
 This document is the Phase 1 protocol freeze for MedShiftLab-CXR. It defines the intended study before formal external validation. Items described as planned are protocol commitments, not completed experiments or results.

@@ -2,7 +2,7 @@
 
 ## Scope
 
-This guide covers repository-level reproducibility and safe manual/local commands for the implemented MedShiftLab-CXR infrastructure. It does not authorize or imply full-dataset inference, external validation completion, training, or clinical use.
+This guide covers repository-level reproducibility and safe manual/local commands for MedShiftLab-CXR. The repository records completed CheXpert reference and VinDr/VinBigData external-dataset evaluations, but the commands in this guide do not by themselves reproduce private runtime artifacts or authorize new data access, training, or clinical use.
 
 ## Environment setup
 
