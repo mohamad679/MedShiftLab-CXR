@@ -228,6 +228,7 @@ def test_script_runs_on_synthetic_files_without_path_leakage(tmp_path: Path) -> 
             "--metadata-csv", str(metadata),
             "--output-dir", str(output_dir),
             "--export-calibration-csv",
+            "--export-calibration-plot",
             "--bootstrap-iters", "20",
             "--seed", "5",
             "--subgroup-columns", "sex", "age_group", "dataset_name",
@@ -247,10 +248,17 @@ def test_script_runs_on_synthetic_files_without_path_leakage(tmp_path: Path) -> 
     assert summary["bootstrap_intervals"] == 3
     assert summary["support_status"]["bootstrap_resampling"] == "patient"
     assert set(summary["outputs_written"]) == {
-        "json", "subgroups_csv", "bootstrap_csv", "calibration_csv"
+        "json",
+        "subgroups_csv",
+        "bootstrap_csv",
+        "calibration_csv",
+        "calibration_plot",
     }
+    assert summary["outputs_written"]["calibration_plot"] == "calibration_curves.png"
     output_text = "\n".join(
-        path.read_text(encoding="utf-8") for path in output_dir.iterdir()
+        path.read_text(encoding="utf-8")
+        for path in output_dir.iterdir()
+        if path.suffix in {".csv", ".json"}
     )
     assert "/synthetic/private" not in result.stdout
     assert "/synthetic/private" not in output_text

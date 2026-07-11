@@ -182,7 +182,7 @@ def run_robustness_analysis_from_files(
         support_status={
             "calibration_bin_data": "implemented",
             "calibration_curve_csv": "implemented",
-            "calibration_plot_export": "not_implemented",
+            "calibration_plot_export": "implemented_optional",
             "bootstrap_ci": (
                 "implemented_not_requested"
                 if config.bootstrap_iters == 0
