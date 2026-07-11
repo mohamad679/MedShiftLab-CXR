@@ -207,6 +207,34 @@ calibration evidence and is not deployment validation.
 
 If a future confirmatory local run explicitly needs bootstrap intervals, set `--bootstrap-iters` to the prespecified value for that run and record it in the experiment card.
 
+### 8. Cross-dataset bootstrap confidence intervals
+
+```bash
+PYTHONPATH=src python scripts/run_cross_dataset_bootstrap_comparison.py \
+  --reference-predictions <PRIVATE_REFERENCE_PREDICTIONS_JSON_OR_CSV> \
+  --reference-labels-csv <PRIVATE_REFERENCE_LABEL_TABLE_CSV> \
+  --external-predictions <PRIVATE_EXTERNAL_PREDICTIONS_JSON_OR_CSV> \
+  --external-labels-csv <PRIVATE_EXTERNAL_LABEL_TABLE_CSV> \
+  --output-dir outputs/local_cross_dataset_bootstrap/<RUN_ID> \
+  --iterations 1000 \
+  --seed 2026 \
+  --confidence-level 0.95 \
+  --n-bins 10 \
+  --metrics auroc,auprc,brier_score,ece
+```
+
+This command reuses existing standardized predictions and label tables. It does
+not run inference, train a model, fit calibration, or tune thresholds. The
+reference and external datasets are bootstrapped independently. Patient-cluster
+bootstrap is used only when every prediction record in that dataset has a
+complete `patient_id`; otherwise sample bootstrap is used for that dataset.
+
+Supported metrics are AUROC, AUPRC, Brier score, and ECE. The cross-dataset
+delta is always computed as external minus reference. Outputs are retrospective
+aggregate uncertainty summaries. They are not clinical confidence intervals,
+and they do not establish clinical validation, prospective validation, or
+deployment validation.
+
 ## Safety warnings
 
 Do not commit:
